@@ -1,0 +1,45 @@
+(1)
+Pull hourly from queue_screen.php as text
+Data to be collated into single csv per day
+http://pbx02.apdcsy1.digitalpacific.com.au/ws/queue_screen.php
+
+Status: Not Started
+Test Scripts:
+
+
+
+(2)
+Extract ticket count as list of lists for:
+[
+  [DP-L1/CR-L2/DP-L3-4/DP-Billing/DP-Total]
+  [CR-L1/CR-L2/CR-L3-4/CR-Billing/CR-Total]
+  [PA-L1/PA-L2/PA-L3-4/PA-Billing/PA-Total]
+  [TL-L1/TL-L2/TL-L3-4/TL-Billing/TL-ALL]
+  ]
+
+Hourly for the above from 00:00 to 23:00
+
+Status: Not Started
+Test Scripts:
+
+
+
+(3)
+
+Add field to list calculating difference between 00:00 and 23:00 each day
+Export list to csv
+
+Status: Not Started
+Test Scripts:
+
+
+
+(4 - Optional)
+
+Email csv to Team Leaders and export to gdrive
+Status: Not Started
+Test Scripts:
+
+
+
+
