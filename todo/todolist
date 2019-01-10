@@ -19,8 +19,8 @@ Extract ticket count as list of lists for:
 
 Hourly for the above from 00:00 to 23:00
 
-Status: Not Started
-Test Scripts:
+Status: In Progress
+Test Scripts: 2.py
 
 
 
@@ -29,8 +29,8 @@ Test Scripts:
 Add field to list calculating difference between 00:00 and 23:00 each day
 Export list to csv
 
-Status: Not Started
-Test Scripts:
+Status: In Progress
+Test Scripts: 2.py
 
 
 
