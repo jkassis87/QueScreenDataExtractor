@@ -1,15 +1,15 @@
 import itertools, csv
 
 #opens the txt as f and converts to list
-f = open('C:\\pytest\\qs1020.txt', 'r').readlines()
+fr = open('C:\\pytest\\qs1020.txt', 'r').readlines()
 
 #extracts ticket count into list, removes unneeded data
 new_data = []
-for idx, val in enumerate(f):
+for idx, val in enumerate(fr):
     if idx > 24 and idx < 29:
         new_data.append(val.split())
         
-# removes level/team name and number from new_data
+#removes level/team name and number from new_data
 for val in new_data:
     del(val[0])
     if len(val) == 5:
@@ -35,19 +35,18 @@ new_body = [
     ]
 
 #print(new_data)
-
 for valx, valy in zip(new_data, new_body):
     valy.append(valx)
     
 print(new_body)
 
 #formats list, this needs work
-
 for idx1, val1 in enumerate(new_body):
     for idx2, val2 in enumerate(val1):
         new_body[idx1][idx2] = new_body[idx1][idx2].replace('\n', '')
 
-# writes list to existing csvfile, this needs work
-
-with open('C:\\pytest\\2csv.csv', 'w', newline='') as f:
-    writer=csv.writer(f)
+#writes list to existing csvfile, this needs work
+with open('C:\\pytest\\2csv.csv', 'w', newline='') as fw:
+    writer=csv.writer(fw)
+    writer.writerow(new_head)
+    writer.writerows(new_body)
