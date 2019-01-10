@@ -1,0 +1,519 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style>
+body {
+    background-color: #292929;
+    color: #E8E8E8;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+table.calltable {
+    margin: 5px;
+    border-collapse: separate;
+    position: absolute;
+    top: 0px;
+    left: 20px;
+    width: 1000px;
+}
+
+table.waittable {
+    margin: 5px;
+    border-collapse: separate;
+    position: absolute;
+    top: 430px;
+    left: 20px;
+    width: 1000px;
+}
+
+table.tickettable {
+    margin: 5px;
+    border-collapse: separate;
+    position: absolute;
+    bottom: 0px;
+    left: 20px;
+    width: 1000px;
+}
+
+table.abandontable {
+    margin: 5px;
+    border-collapse: separate;
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+    width: 600px;
+}
+
+table.commissionstable {
+    display: none;
+    margin: 5px;
+    border-collapse: separate;
+    position: absolute;
+    bottom: 380px;
+    right: 20px;
+    width: 800px;
+}
+
+td.commissions_name {
+    width: 500px;
+    height: 65px;
+    font-size: 44px;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+td.commissions_total {
+    width: 150px;
+    height: 65px;
+    font-size: 44px;
+    white-space: nowrap;
+    text-align: left;
+}
+
+
+td.heading {
+    width: 250px;
+    height: 80px;
+    font-size: 50px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+td {
+    font-size: 60px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.totals {
+    width: 400px;
+}
+
+div.commissionsblock {
+    position: absolute;
+    bottom: 370px;
+    right: 0;
+    width: 850px;
+    height: 480px;
+    font-size: 66px;
+    text-align: center;
+    border-radius: 20px;
+    border: 8px solid #EB63D9;
+    background: #292929;
+    display: none;
+}
+
+div.callblock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1000px;
+    height: 600px;
+    border-radius: 20px;
+    border: 8px solid #73AD21;
+    background: #292929;
+}
+
+div.ticketblock {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 1000px;
+    height: 420px;
+    border-radius: 20px;
+    border: 8px solid #73AD21;
+    background: #292929;
+}
+
+div.abandonblock {
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    width: 640px;
+    height: 420px;
+    border-radius: 20px;
+    border: 8px solid #FF0000;
+    background: #292929;
+}
+
+.clockdate-wrapper {
+    background-color: #333;
+    padding:25px;
+    max-width:350px;
+    width:100%;
+    text-align:center;
+    border-radius:5px;
+    margin:0 auto;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    zoom: 160%;
+}
+#clock{
+    background-color:#333;
+    font-family: sans-serif;
+    font-size:60px;
+    text-shadow:0px 0px 1px #fff;
+    color:#fff;
+}
+#clock span {
+    color:#888;
+    text-shadow:0px 0px 1px #333;
+    font-size:30px;
+    position:relative;
+    top:-27px;
+    left:-10px;
+}
+#date {
+    font-size:32px;
+    font-family:arial,sans-serif;
+    color:#fff;
+}
+
+
+</style>
+</head><body onload="connect();startTime();">
+<div class="commissionsblock"></div>
+<div class="callblock"></div>
+<div class="ticketblock"></div>
+<div class="abandonblock"></div>
+<table class="commissionstable">
+<tbody><tr>
+  <td class="commissions_name" id="commissions_0_name">Kyle Hudson</td>
+  <td class="commissions_total" id="commissions_0_total">$40.00</td>
+</tr>
+<tr>
+  <td class="commissions_name" id="commissions_1_name">Joshua Hinton</td>
+  <td class="commissions_total" id="commissions_1_total">$30.00</td>
+</tr>
+<tr>
+  <td class="commissions_name" id="commissions_2_name">Emily Hellyer</td>
+  <td class="commissions_total" id="commissions_2_total">$20.00</td>
+</tr>
+<tr>
+  <td class="commissions_name" id="commissions_3_name">Gaetano Egisto</td>
+  <td class="commissions_total" id="commissions_3_total">$20.00</td>
+</tr>
+<tr>
+  <td class="commissions_name" id="commissions_4_name">Loy Dy</td>
+  <td class="commissions_total" id="commissions_4_total">$20.00</td>
+</tr>
+<tr>
+  <td class="commissions_name" id="commissions_5_name">Peter Fisk</td>
+  <td class="commissions_total" id="commissions_5_total">$20.00</td>
+</tr>
+<tr>
+  <td class="commissions_name" id="commissions_6_name">Jay Kassis</td>
+  <td class="commissions_total" id="commissions_6_total">$20.00</td>
+</tr>
+</tbody></table>
+<table class="abandontable">
+<tbody><tr>
+  <td class="heading">DP</td>
+  <td id="AnsDP">41</td>
+  <td id="MissDP">0</td>
+</tr>
+<tr>
+  <td class="heading">Crucial</td>
+  <td id="AnsCrucial">4</td>
+  <td id="MissCrucial">0</td>
+</tr>
+<tr>
+  <td class="heading">Panthur</td>
+  <td id="AnsPanthur">5</td>
+  <td id="MissPanthur">0</td>
+</tr>
+<tr>
+  <td class="heading">Total</td>
+  <td id="AnsTotal">50</td>
+  <td id="MissTotal">0</td>
+</tr>
+<tr>
+  <td colspan="3" class="heading"><div id="percmiss">0% Abandonment</div></td>
+</tr>
+</tbody></table>
+<table class="calltable">
+<tbody><tr>
+  <td></td>
+  <td class="heading">DP</td>
+  <td class="heading">Crucial</td>
+  <td class="heading">Panthur</td>
+
+</tr><tr>
+  <td class="heading">Support</td>
+  <td id="DPSupport">0</td>
+  <td id="CrucialSupport">0</td>
+  <td id="PanthurSupport">1</td>
+</tr>
+<tr>
+  <td class="heading">L2 Support</td>
+  <td id="DPL2">0</td>
+  <td id="CrucialL2">0</td>
+  <td id="PanthurL2">0</td>
+</tr>
+<tr>
+  <td class="heading">Accounts</td>
+  <td id="DPAccounts">0</td>
+  <td id="CrucialAccounts">0</td>
+  <td id="PanthurAccounts">0</td>
+</tr>
+</tbody></table>
+<table class="waittable">
+<tbody><tr>
+  <td class="heading">Max Wait Time</td>
+  <td class="heading">Total in Queues</td>
+</tr>
+<tr>
+  <td class="totals"><div id="waittimedisplay">00:04:42</div><div id="waittime" style="display:none;">1547080626000</div></td>
+  <td class="totals"><div id="totalwaitingdisplay">1</div></td>
+</tr>
+</tbody></table>
+<table class="tickettable">
+<tbody><tr>
+  <td></td>
+  <td class="heading">DP</td>
+  <td class="heading">Crucial</td>
+  <td class="heading">Panthur</td>
+  <td class="heading">Total</td>
+</tr>
+<tr>
+  <td class="heading">Level 1</td>
+  <td id="ticket_DPL1">14</td>
+  <td id="ticket_CrucialL1">4</td>
+  <td id="ticket_PanthurL1">7</td>
+  <td id="ticket_TotalL1">25</td>
+</tr>
+<tr>
+  <td class="heading">Level 2</td>
+  <td id="ticket_DPL2">1</td>
+  <td id="ticket_CrucialL2">0</td>
+  <td id="ticket_PanthurL2">0</td>
+  <td id="ticket_TotalL2">1</td>
+</tr>
+<tr>
+  <td class="heading">Level 3/4</td>
+  <td id="ticket_DPL3">0</td>
+  <td id="ticket_CrucialL3">0</td>
+  <td id="ticket_PanthurL3">0</td>
+  <td id="ticket_TotalL3">0</td>
+</tr>
+<tr>
+  <td class="heading">Billing</td>
+  <td id="ticket_DPBil">60</td>
+  <td id="ticket_CrucialBil">22</td>
+  <td id="ticket_PanthurBil">16</td>
+  <td id="ticket_TotalBil">98</td>
+</tr>
+</tbody></table>
+
+<div id="clockdate">
+  <div class="clockdate-wrapper">
+    <div id="clock">11:41:48</div>
+    <div id="date">Thu, 10 January 2019</div>
+  </div>
+</div>
+
+<div id="fourtwenty" style="display: none; position: absolute; right: 60px; top: 30px;"><img src="qs10-01-2019-1120AM.php_files/420.png" width="350px"></div>
+
+<script>
+function startTime() {
+    var today = new Date();
+    var hr = today.getHours();
+    var min = today.getMinutes();
+    var sec = today.getSeconds();
+    //ap = (hr < 12) ? "<span>AM</span>" : "<span>PM</span>";
+    //hr = (hr == 0) ? 12 : hr;
+    //hr = (hr > 12) ? hr - 12 : hr;
+    //Add a zero in front of numbers<10
+    hr = checkTime(hr);
+    min = checkTime(min);
+    sec = checkTime(sec);
+    document.getElementById("clock").innerHTML = hr + ":" + min + ":" + sec;
+    
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var curWeekDay = days[today.getDay()];
+    var curDay = today.getDate();
+    var curMonth = months[today.getMonth()];
+    var curYear = today.getFullYear();
+    var date = curWeekDay+", "+curDay+" "+curMonth+" "+curYear;
+    document.getElementById("date").innerHTML = date;
+
+    if (hr == 16 && min == 20) {
+        document.getElementById("fourtwenty").style.display = "block";
+    } else {
+        document.getElementById("fourtwenty").style.display = "none";
+    }
+    
+    var time = setTimeout(function(){ startTime() }, 500);
+}
+function checkTime(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+</script>
+
+<script>
+var countDownDate = new Date("Nov 1, 2017 00:00:00").getTime();
+var x = setInterval(function() {
+  var now = new Date().getTime();
+  if (document.getElementById("waittime").innerHTML!="000") {
+    var distance = now - document.getElementById("waittime").innerHTML;
+    var hours = ("0"+Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
+    var mins = ("0"+Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
+    var secs = ("0"+Math.floor((distance % (1000 * 60)) / 1000)).slice(-2);
+    document.getElementById("waittimedisplay").innerHTML=hours + ":" + mins + ":" + secs;
+  } else {
+    document.getElementById("waittimedisplay").innerHTML="";
+  }
+  var ans = parseInt(document.getElementById("AnsDP").innerHTML) + parseInt(document.getElementById("AnsCrucial").innerHTML) + parseInt(document.getElementById("AnsPanthur").innerHTML);
+  var miss = parseInt(document.getElementById("MissDP").innerHTML) + parseInt(document.getElementById("MissCrucial").innerHTML) + parseInt(document.getElementById("MissPanthur").innerHTML);
+  var perc = Math.round((miss / (ans + miss)) * 100);
+  if (isNaN(perc)) {
+    document.getElementById("percmiss").innerHTML = "";
+  } else {
+    document.getElementById("percmiss").innerHTML = perc + "% Abandonment";
+  } 
+  
+}, 1000);
+</script>
+
+ <script>
+var socket;
+var url = null;
+var host= null;
+var port=null;
+var path=null;
+
+function connect()
+{
+hostip="101.0.101.110";
+port="4444";
+console.log("Connecting to "+host+":"+port);
+ init();
+}
+
+function init(){
+
+  host="ws://"+hostip+":"+port;
+  url=host;
+  console.log("Connecting to "+host+" url:"+url);
+      log('trying WebSocket - : '+url);
+  try{
+    socket = new WebSocket(host);
+    log('WebSocket - status '+socket.readyState);
+    socket.onopen    = function(msg){ log("Welcome - status "+this.readyState);
+setTimeout(function () {
+  send('fullqueueupdate');
+}, 5000);
+
+ };
+    socket.onmessage = function(msg){
+         console.log("Ws-data"+msg);
+         log("Server>: "+msg.data);
+
+         update(msg.data);
+
+
+         };
+    socket.onclose   = function(msg){ setTimeout(function(){init()}, 5000); };
+  }
+  catch(ex){ log(ex); }
+}
+
+function update(msg){
+var myarr = msg.split(":");
+var type = myarr[0];
+var cl = myarr[1];
+var time = myarr[2];
+  if (myarr[0]=="queuemessage") {
+    $(cl).innerHTML = time;
+  }
+  if (myarr[0]=="maxwaittime") {
+    document.getElementById("waittime").innerHTML = cl+"000";
+  }
+  if (myarr[0]=="queuetotal") {
+    totalwaitingdisplay.innerHTML = cl;
+  }
+  if (myarr[0]=="AnsMiss") {
+    document.getElementById(myarr[1]).innerHTML = myarr[2];
+    var AnsTotal = +document.getElementById("AnsDP").innerHTML + +document.getElementById("AnsCrucial").innerHTML + +document.getElementById("AnsPanthur").innerHTML;
+    var MissTotal = +document.getElementById("MissDP").innerHTML + +document.getElementById("MissCrucial").innerHTML + +document.getElementById("MissPanthur").innerHTML;
+    document.getElementById("AnsTotal").innerHTML = AnsTotal;
+    document.getElementById("MissTotal").innerHTML = MissTotal;
+  }
+  if (myarr[0]=="ticketcount") {
+    document.getElementById("ticket_"+myarr[1]).innerHTML = myarr[2];
+    var ticket_DPL1 = document.getElementById("ticket_DPL1").innerHTML;
+    var ticket_CrucialL1 = document.getElementById("ticket_CrucialL1").innerHTML;
+    var ticket_PanthurL1 = document.getElementById("ticket_PanthurL1").innerHTML;
+    var ticket_TotalL1 = +ticket_DPL1 + +ticket_CrucialL1 + +ticket_PanthurL1;
+    document.getElementById("ticket_TotalL1").innerHTML = ticket_TotalL1; 
+    var ticket_DPL2 = document.getElementById("ticket_DPL2").innerHTML;
+    var ticket_CrucialL2 = document.getElementById("ticket_CrucialL2").innerHTML;
+    var ticket_PanthurL2 = document.getElementById("ticket_PanthurL2").innerHTML;
+    var ticket_TotalL2 = +ticket_DPL2 + +ticket_CrucialL2 + +ticket_PanthurL2;
+    document.getElementById("ticket_TotalL2").innerHTML = ticket_TotalL2;
+    var ticket_DPL3 = document.getElementById("ticket_DPL3").innerHTML;
+    var ticket_CrucialL3 = document.getElementById("ticket_CrucialL3").innerHTML;
+    var ticket_PanthurL3 = document.getElementById("ticket_PanthurL3").innerHTML;
+    var ticket_TotalL3 = +ticket_DPL3 + +ticket_CrucialL3 + +ticket_PanthurL3;
+    document.getElementById("ticket_TotalL3").innerHTML = ticket_TotalL3;
+    var ticket_DPBil = document.getElementById("ticket_DPBil").innerHTML;
+    var ticket_CrucialBil = document.getElementById("ticket_CrucialBil").innerHTML;
+    var ticket_PanthurBil = document.getElementById("ticket_PanthurBil").innerHTML;
+    var ticket_TotalBil = +ticket_DPBil + +ticket_CrucialBil + +ticket_PanthurBil;
+    document.getElementById("ticket_TotalBil").innerHTML = ticket_TotalBil;
+  }
+  if (myarr[0]=="commissions") {
+    document.getElementById("commissions_"+myarr[1]).innerHTML = myarr[2];
+  }
+  if (myarr[0].length==3) {
+    if (myarr[1]=="reload") {
+      window.location.reload(true);
+    }
+  }
+
+}
+
+
+function send(msg){
+  var txt,msg;
+  //txt = $("msg");
+  //msg = txt.value;
+  if(!msg){ alert("Message can not be empty"); return; }
+  //txt.value="";
+  //txt.focus();
+  try
+    {
+        socket.send(msg);
+        log('>>: '+msg); }
+        catch(ex)
+        { log(ex);      }
+}
+
+function quit(){
+  log("Goodbye! "+url);
+  socket.close();
+  socket=null;
+}
+
+// Utilities
+function $(id)
+  { return document.getElementById(id); }
+
+function log(msg){
+  }
+
+function onkey(event){ if(event.keyCode==13){ send(); } }
+</script>
+ 
+
+
+
+<div class="clippy" style="display: none; width: 124px; height: 93px; background: rgba(0, 0, 0, 0) url(&quot;moz-extension://cdc5888f-ebd8-417b-af64-cc06eb911b63/src/assets/img/clippy.map.png&quot;) no-repeat scroll 0% 0%;"></div><div class="clippy-balloon" style="display: none;"><div class="clippy-tip"></div><div class="clippy-content"></div></div></body></html>

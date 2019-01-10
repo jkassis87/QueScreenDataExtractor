@@ -1,0 +1,33 @@
+Kyle Hudson 	$40.00
+Joshua Hinton 	$30.00
+Emily Hellyer 	$20.00
+Gaetano Egisto 	$20.00
+Loy Dy 	$20.00
+Peter Fisk 	$20.00
+Jay Kassis 	$20.00
+
+DP 	62 	0
+Crucial 	8 	0
+Panthur 	8 	1
+Total 	78 	1
+1% Abandonment
+
+	DP 	Crucial 	Panthur
+Support 	1 	0 	0
+L2 Support 	0 	0 	0
+Accounts 	1 	0 	0
+
+Max Wait Time 	Total in Queues
+00:02:33
+1547084570000
+	
+3
+
+	DP 	Crucial 	Panthur 	Total
+Level 1 	9 	4 	3 	16
+Level 2 	2 	0 	0 	2
+Level 3/4 	0 	0 	0 	0
+Billing 	61 	23 	16 	100
+
+12:45:23
+Thu, 10 January 2019
