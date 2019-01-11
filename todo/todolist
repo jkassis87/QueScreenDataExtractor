@@ -3,7 +3,7 @@ Pull hourly from queue_screen.php as text
 Data to be collated into single csv per day
 http://pbx02.apdcsy1.digitalpacific.com.au/ws/queue_screen.php
 
-Status: Not Started
+Status: ON HOLD: Waiting for Pat to provide JSON data
 Test Scripts:
 
 
@@ -40,6 +40,8 @@ Email csv to Team Leaders and export to gdrive
 Status: Not Started
 Test Scripts:
 
-
-
+test email account:
+pytest@yourdomain.netau
+0ognxm1uv3bu
+mail.yourdomain.net.au
 
