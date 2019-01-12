@@ -23,7 +23,6 @@ Status: In Progress
 Test Scripts: 2.py
 
 
-
 (3)
 
 Add field to list calculating difference between 00:00 and 23:00 each day
@@ -33,15 +32,17 @@ Status: In Progress
 Test Scripts: 2.py
 
 
-
 (4 - Optional)
 
-Email csv to Team Leaders and export to gdrive
-Status: Not Started
-Test Scripts:
+Email csv to Team Leaders 
+Status: Almost Complete
+Test Scripts: 4.py
 
 test email account:
 pytest@yourdomain.netau
 0ognxm1uv3bu
 mail.yourdomain.net.au
 
+(5 - Optional)
+
+Have csv uploaded automatically to gdrive folder
