@@ -46,3 +46,21 @@ mail.yourdomain.net.au
 (5 - Optional)
 
 Have csv uploaded automatically to gdrive folder
+
+
+Status: Just Started
+Test Scripts:
+
+test account: j17747@gmail.com
+Gdrive API Details:
+Client ID
+296239954446-ikj5a45b4p8ktuoefrsm0ckmp394m8j7.apps.googleusercontent.com
+Client Secret
+cMhzBXPEY0-aRfR5NVTzxv84
+Client Config:
+credentials.json
+
+
+
+
+
