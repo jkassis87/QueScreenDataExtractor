@@ -38,6 +38,10 @@ sheet.insert_row(row, index)
 #delete row from sheet
 sheet.delete_row(1)
 
+# update specific sheet, get_worksheet(int/index)
+ws = sheet.get_worksheet(1)
+ws.update_acell('C3', 'Gspreadit')
+
 #get row count
 sheet.row_count
 sheet.delete_row(1)
