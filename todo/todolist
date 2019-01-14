@@ -1,10 +1,16 @@
 (1)
-Pull hourly from queue_screen.php as text
+Pull hourly from tickethistory_api.php as text
 Data to be collated into single csv per day
-http://pbx02.apdcsy1.digitalpacific.com.au/ws/queue_screen.php
 
-Status: ON HOLD: Waiting for Pat to provide JSON data
-Test Scripts:
+API endpoint: http://pbx02.apdcsy1.digitalpacific.com.au/tickethistory_api.php?interval=60&date=2019-05-19
+BasicAUTH
+?interval and ?date can be changed, down to 5min intervals
+Username: X
+Password: 5rsMThTeZ22p3MqGpz2xRPGY5hAWrwmx
+note: screen will clear daily but stats for previous dates can be accessed indefinitely
+
+Status: just started
+Test Scripts: 1.py
 
 
 
