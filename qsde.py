@@ -35,6 +35,10 @@ print(ticketvalue)
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
+
+now = datetime.now()
+dayofw = now.day
 
 scope = ['https://spreadsheets.google.com/feeds',
 'https://www.googleapis.com/auth/drive']
@@ -42,17 +46,8 @@ scope = ['https://spreadsheets.google.com/feeds',
 creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 client = gspread.authorize(creds)
 
-#code should open "current month" create it if it doesn't exist
-sheet = client.open("Jan2018").sheet1
+sht = client.open('QDSE-Jan-2018')
+worksheet = sht.get_worksheet(dayofw)
 
 #writes to sheet
-sheet.update_cell(1, 1, "I just wrote to a spreadsheet using Python!")
-## dummy data ##
-
-
-#update specific sheet, get_worksheet(int/index)
-ws = sheet.get_worksheet(1)
-ws.update_acell('C3', 'Gspreadit')
-## dummy data ##
-
-
+worksheet.update_cell(3, 3, "I just wrote to a spreadsheet using Python!")
