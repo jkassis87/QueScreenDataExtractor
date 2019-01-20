@@ -1,13 +1,17 @@
-import json, requests
+import json, requests, csv
+from datetime import datetime, timedelta
 
-#imports json and loads it as dict
-#user/pass for the ticket history api
+#gets the previos day's date in YYYY-MM-DD string
+now = datetime.now() - timedelta(1)
+yesterday = (str(now.year) + '-' + str(now.month) + '-' + str(now.day))
+
+#user/pass and URL for the ticket history api
 ruser = 'X'
 rpass = '5rsMThTeZ22p3MqGpz2xRPGY5hAWrwmx'
+urltoget = (r'http://pbx02.apdcsy1.digitalpacific.com.au/tickethistory_api.php?date=' + yesterday)
 
 #grabs the ticket data and converts it from json to python dict
-### need to modify url, create string using datetime to get previos day
-getticketdata = requests.get('http://pbx02.apdcsy1.digitalpacific.com.au/tickethistory_api.php', auth=(ruser, rpass))
+getticketdata = requests.get(urltoget, auth=(ruser, rpass))
 j = json.loads(getticketdata.text)
 
 #makes list with default values
@@ -23,28 +27,33 @@ tlist = [['x', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
 
 #populates list with ticket stats from json
 for idx, val in j.items():
-    #DPL1.append(val[
-    tlist[0].append(int(val['DP']['L1']))
-    tlist[1].append(int(val['DP']['L2']))
-    tlist[2].append(int(val['DP']['L3']))
-    tlist[3].append(int(val['DP']['Bil']))
-    tlist[4].append(int(val['Crucial']['L1']))
-    tlist[5].append(int(val['Crucial']['L2']))
-    tlist[6].append(int(val['Crucial']['L3']))
-    tlist[7].append(int(val['Crucial']['Bil']))
-    tlist[8].append(int(val['Panthur']['L1']))
-    tlist[9].append(int(val['Panthur']['L2']))
-    tlist[10].append(int(val['Panthur']['L3']))
-    tlist[11].append(int(val['Panthur']['Bil']))
+    tlist[1].append(int(val['DP']['L1']))
+    tlist[2].append(int(val['DP']['L2']))
+    tlist[3].append(int(val['DP']['L3']))
+    tlist[4].append(int(val['DP']['Bil']))
+    tlist[5].append(int(val['Crucial']['L1']))
+    tlist[6].append(int(val['Crucial']['L2']))
+    tlist[7].append(int(val['Crucial']['L3']))
+    tlist[8].append(int(val['Crucial']['Bil']))
+    tlist[9].append(int(val['Panthur']['L1']))
+    tlist[10].append(int(val['Panthur']['L2']))
+    tlist[11].append(int(val['Panthur']['L3']))
+    tlist[12].append(int(val['Panthur']['Bil']))
 
 #calculates totals, appends to list
-count = 1
-while count < 25:
-    tlist[12].append(tlist[0][count] + tlist[4][count] + tlist[8][count])
-    tlist[13].append(tlist[1][count] + tlist[5][count] + tlist[9][count])
-    tlist[14].append(tlist[2][count] + tlist[6][count] + tlist[10][count])
-    tlist[15].append(tlist[3][count] + tlist[7][count] + tlist[11][count])
-    count += 1
+x = 1
+while x < 25:
+    tlist[13].append(tlist[1][x] + tlist[5][x] + tlist[9][x])
+    tlist[14].append(tlist[2][x] + tlist[6][x] + tlist[10][x])
+    tlist[15].append(tlist[3][x] + tlist[7][x] + tlist[11][x])
+    tlist[16].append(tlist[4][x] + tlist[8][x] + tlist[12][x])
+    x += 1
+
+#saves list to csv
+with open((yesterday + '.csv'), "w") as f:
+    writer = csv.writer(f)
+    writer.writerows(tlist)
+
 
 #calculates difference, appends to list
 ###need to confirm if last hour gets appended
@@ -62,7 +71,6 @@ while x < 24:
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime, timedelta
 
 # sets the scope/permission level for the API calls
 scope = ['https://spreadsheets.google.com/feeds',
