@@ -12,11 +12,13 @@ j = json.loads(getticketdata.text)
 
 #makes list with default values
 ###need to add list of hours
-tlist = [['DPL1'], ['DPL2'], ['DPL3'], ['DPLB'],
+tlist = [['x', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
+         ['DPL1'], ['DPL2'], ['DPL3'], ['DPLB'],
          ['CRL1'], ['CRL2'], ['CRL3'], ['CRLB'],
          ['PAL1'], ['PAL2'], ['PAL3'], ['PALB'],
          ['TTL1'], ['TTL2'], ['TTL3'], ['TTLB'],
-         ['DFL1', 0], ['DFL2', 0], ['DFL3', 0], ['DFLB', 0]]
+         ['DFL1', 0], ['DFL2', 0], ['DFL3', 0], ['DFLB', 0]
+         ]
 
 
 #populates list with ticket stats from json
@@ -58,8 +60,40 @@ while x < 24:
     tlist[19].append(z)
     x += 1
 
-for item in tlist:
-    print(item, end='\n')
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime, timedelta
+
+# sets the scope/permission level for the API calls
+scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
+
+# authenticates with google API
+creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+client = gspread.authorize(creds)
+
+# gets day of the month (daynow) and year+month (yearmonth) as a strong
+now = datetime.now()
+daynow = now.day
+yearmonth = (f"{now.year}-{now.month}")
+yesterday = datetime.now() - timedelta(days=1)
+
+sh = client.open('qsde_init')
 
 
+#creates a new spreadsheet if it's the first day of the month
+if now.day == 1:
+    sh.client.create(yearmonth)
+    sh = client.open(yearmonth)
+    # may need to update permissions on gogle api/auth end or generate new client_secrets
+    sh.share('j17747@gmail.com', perm_type='user', role='writer')
+    worksheet = sh.add_worksheet(title=str(daynow), rows="22", cols="30")
+
+
+#export list into gsheet
+sh.values_update(
+    'Sheet1!A1', 
+    params={'valueInputOption': 'RAW'}, 
+    body={'values': tlist}
+)
 
