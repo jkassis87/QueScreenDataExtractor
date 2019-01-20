@@ -14,8 +14,8 @@ urltoget = (r'http://pbx02.apdcsy1.digitalpacific.com.au/tickethistory_api.php?d
 getticketdata = requests.get(urltoget, auth=(ruser, rpass))
 j = json.loads(getticketdata.text)
 
+
 #makes list with default values
-###need to add list of hours
 tlist = [['x', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
          ['DPL1'], ['DPL2'], ['DPL3'], ['DPLB'],
          ['CRL1'], ['CRL2'], ['CRL3'], ['CRLB'],
@@ -40,6 +40,7 @@ for idx, val in j.items():
     tlist[11].append(int(val['Panthur']['L3']))
     tlist[12].append(int(val['Panthur']['Bil']))
 
+         
 #calculates totals, appends to list
 x = 1
 while x < 25:
@@ -49,14 +50,24 @@ while x < 25:
     tlist[16].append(tlist[4][x] + tlist[8][x] + tlist[12][x])
     x += 1
 
-#saves list to csv
-with open((yesterday + '.csv'), "w") as f:
-    writer = csv.writer(f)
-    writer.writerows(tlist)
+
+#calculates difference
+### need to fix last collumn
+x = 1
+while x < 24:
+    z = tlist[13][x] - tlist[13][x + 1]
+    tlist[17].append(z)
+    z = tlist[14][x] - tlist[14][x + 1]
+    tlist[18].append(z)
+    z = tlist[15][x] - tlist[15][x + 1]
+    tlist[19].append(z)
+    z = tlist[16][x] - tlist[16][x + 1]
+    tlist[20].append(z)
+    x += 1
 
 
 #calculates difference, appends to list
-###need to confirm if last hour gets appended
+###need to confirm if last hour gets calculated properly
 x = 1
 while x < 24:
     z = tlist[12][x] - tlist[12][x + 1]
@@ -68,6 +79,13 @@ while x < 24:
     z = tlist[15][x] - tlist[15][x + 1]
     tlist[19].append(z)
     x += 1
+
+
+#saves list to csv
+with open((yesterday + '.csv'), "w") as f:
+    writer = csv.writer(f)
+    writer.writerows(tlist)
+
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -81,13 +99,11 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', s
 client = gspread.authorize(creds)
 
 # gets day of the month (daynow) and year+month (yearmonth) as a strong
-now = datetime.now()
 daynow = now.day
 yearmonth = (f"{now.year}-{now.month}")
 yesterday = datetime.now() - timedelta(days=1)
 
 sh = client.open('qsde_init')
-
 
 #creates a new spreadsheet if it's the first day of the month
 if now.day == 1:
