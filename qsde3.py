@@ -1,4 +1,4 @@
-import json, requests, csv
+import json, requests
 from datetime import datetime, timedelta
 
 # gets the previos day's date in YYYY-MM-DD string
@@ -54,6 +54,8 @@ client = gspread.authorize(creds)
 
 # gets day of the month (daynow) and year+month (yearmonth) as a strong
 daynow = now.day
+yearmonth = (f"{now.year}-{now.month}")
+yesterday = datetime.now() - timedelta(days=1)
 
 # opens the current months spreadsheet
 sh = client.open(yearmonth)
@@ -62,14 +64,11 @@ sh = client.open(yearmonth)
 if daynow == 1:
     sh.share('j17747@gmail.com', perm_type='user', role='writer')
 
-
-yearmonth = (f"{now.year}-{now.month}")
-yesterday = datetime.now() - timedelta(days=1)
-
+wstoupdate = str(f"{now.day}!A1")
 
 # export list into gsheet
 sh.values_update(
-    'Sheet1!A1',
+    wstoupdate,
     params={'valueInputOption': 'RAW'},
     body={'values': tlist}
 )
