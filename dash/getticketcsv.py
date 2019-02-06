@@ -60,14 +60,14 @@ readcsv = csv.reader(f)
 yesterday_ls = list(readcsv)
 
 # calcs difference for first hour of the day
-tlist[17].append(int(yesterday_ls[13][23]) - tlist[13][1])
-tlist[18].append(int(yesterday_ls[13][23]) - tlist[14][1])
-tlist[19].append(int(yesterday_ls[13][23]) - tlist[15][1])
-tlist[20].append(int(yesterday_ls[13][23]) - tlist[16][1])
+tlist[17].append(tlist[13][1] - int(yesterday_ls[13][24]))
+tlist[18].append(tlist[13][1] - int(yesterday_ls[13][24]))
+tlist[19].append(tlist[13][1] - int(yesterday_ls[13][24]))
+tlist[20].append(tlist[13][1] - int(yesterday_ls[13][24]))
 
 # calcs difference for rest of the dates
 x = 2
-while x < 24:
+while x < 25:
     tlist[17].append(tlist[13][x] - tlist[13][(x-1)])
     tlist[18].append(tlist[14][x] - tlist[14][(x-1)])
     tlist[19].append(tlist[15][x] - tlist[15][(x-1)])
@@ -76,6 +76,9 @@ while x < 24:
 
 # just to show what was done, will be removed in final
 for x in tlist:
+    print(x, end='\n')
+
+for x in yesterday_ls:
     print(x, end='\n')
 
 # writes new csv file with all relevant data
