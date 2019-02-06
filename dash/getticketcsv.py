@@ -54,16 +54,16 @@ while x < 25:
     x += 1
 
 # opens previous date's data to get last total values for calcing difference
-csvname = yesterday + '.csv'
-f = open(csvname, 'r')
+csvofbefore = beforenow + '.csv'
+f = open(csvofbefore, 'r')
 readcsv = csv.reader(f)
 yesterday_ls = list(readcsv)
 
 # calcs difference for first hour of the day
-tlist[17].append(yesterday_ls[13][23] - tlist[13][1])
-tlist[18].append(yesterday_ls[13][23] - tlist[14][1])
-tlist[19].append(yesterday_ls[13][23] - tlist[15][1])
-tlist[20].append(yesterday_ls[13][23] - tlist[16][1])
+tlist[17].append(int(yesterday_ls[13][23]) - tlist[13][1])
+tlist[18].append(int(yesterday_ls[13][23]) - tlist[14][1])
+tlist[19].append(int(yesterday_ls[13][23]) - tlist[15][1])
+tlist[20].append(int(yesterday_ls[13][23]) - tlist[16][1])
 
 # calcs difference for rest of the dates
 x = 2
@@ -74,12 +74,12 @@ while x < 24:
     tlist[20].append(tlist[16][x] - tlist[16][(x-1)])
     x += 1
 
-
+# just to show what was done, will be removed in final
 for x in tlist:
     print(x, end='\n')
 
 # writes new csv file with all relevant data
-
+csvname = yesterday + '.csv'
 with open(csvname,'w', newline= '') as f:
     writer = csv.writer(f)
     writer.writerows(tlist)
