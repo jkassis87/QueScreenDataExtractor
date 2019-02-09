@@ -9,9 +9,11 @@ from datetime import timedelta
 now = dt.now() - timedelta(1)
 date = (str(now.year) + '-' + str(now.month) + '-' + str(now.day) + '.csv')
 
-f = open(date, 'r')
-csvfile = csv.reader(f)
-tdata = list(csvfile)
+def get_csv(date):
+    f = open(date, 'r')
+    csvfile = csv.reader(f)
+    tdata = list(csvfile)
+    return(tdata)
 
 app = dash.Dash(__name__)
 
@@ -25,20 +27,20 @@ app.layout = html.Div(children=[
         id = 'date picker single',
         min_date_allowed = dt(2019, 1, 11),
         max_date_allowed = now,
-        initial_visible_month = dt(2019, 1, 11),
+        initial_visible_month = now,
         date = dt(2019, 1, 12)),
     html.Div(id='output-container-date-picker-single'),
     dcc.Graph(id = 'L1 Total',
               figure = {
                   'data': [
-                      {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
-                      {'x': tdata[0], 'y': tdata[17], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
-                      {'x': tdata[0], 'y': tdata[14], 'type': 'line', 'name': 'Total L2', 'marker': {'color': 'rgb(234, 0, 0)'}},
-                      {'x': tdata[0], 'y': tdata[18], 'type': 'bar', 'name': 'Diff L2', 'marker': {'color': 'rgb(234, 0, 0)'}},
-                      {'x': tdata[0], 'y': tdata[15], 'type': 'line', 'name': 'Total L3', 'marker': {'color': 'rgb(0, 234, 15)'}},
-                      {'x': tdata[0], 'y': tdata[19], 'type': 'bar', 'name': 'Diff L3', 'marker': {'color': 'rgb(0, 234, 15)'}},
-                      {'x': tdata[0], 'y': tdata[16], 'type': 'line', 'name': 'Total Bil', 'marker': {'color': 'rgb(246, 0, 255)'}},
-                      {'x': tdata[0], 'y': tdata[20], 'type': 'bar', 'name': 'Diff Bil', 'marker': {'color': 'rgb(246, 0, 255)'}},
+                      {'x': get_csv(date)[0], 'y': get_csv(date)[13], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
+                      {'x': get_csv(date)[0], 'y': get_csv(date)[17], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
+                      {'x': get_csv(date)[0], 'y': get_csv(date)[14], 'type': 'line', 'name': 'Total L2', 'marker': {'color': 'rgb(234, 0, 0)'}},
+                      {'x': get_csv(date)[0], 'y': get_csv(date)[18], 'type': 'bar', 'name': 'Diff L2', 'marker': {'color': 'rgb(234, 0, 0)'}},
+                      {'x': get_csv(date)[0], 'y': get_csv(date)[15], 'type': 'line', 'name': 'Total L3', 'marker': {'color': 'rgb(0, 234, 15)'}},
+                      {'x': get_csv(date)[0], 'y': get_csv(date)[19], 'type': 'bar', 'name': 'Diff L3', 'marker': {'color': 'rgb(0, 234, 15)'}},
+                      {'x': get_csv(date)[0], 'y': get_csv(date)[16], 'type': 'line', 'name': 'Total Bil', 'marker': {'color': 'rgb(246, 0, 255)'}},
+                      {'x': get_csv(date)[0], 'y': get_csv(date)[20], 'type': 'bar', 'name': 'Diff Bil', 'marker': {'color': 'rgb(246, 0, 255)'}},
                       ],
                   'layout': {
                       'title': 'Hostopia Ticket Stats',
