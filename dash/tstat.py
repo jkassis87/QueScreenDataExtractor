@@ -9,7 +9,7 @@ f = open('2019-2-5.csv', 'r')
 csvfile = csv.reader(f)
 tdata = list(csvfile)
 
-app = dash.Dash()
+app = dash.Dash(__name__)
 
 colors = {
     'background': '#FFFFFF',
@@ -23,6 +23,7 @@ app.layout = html.Div(children=[
         max_date_allowed = dt(2019, 2, 19),
         initial_visible_month=dt(2019, 1, 11),
         date = dt(2019, 1, 12)),
+    html.Div(id='output-container-date-picker-single'),
     dcc.Graph(id = 'L1 Total',
               figure = {
                   'data': [
@@ -43,6 +44,16 @@ app.layout = html.Div(children=[
               )
 ])
 
+@app.callback(
+    dash.dependencies.Output('output-container-date-picker-single', 'children'),
+    [dash.dependencies.Input('date picker single', 'date')])
+
+def update_output(date):
+    string_prefix = 'You have selected: '
+    if date is not None:
+        date = dt.strptime(date, '%Y-%m-%d')
+        date_string = date.strftime('%B %d, %Y')
+        return string_prefix + date_string
 
 if __name__ == '__main__':
     app.run_server(debug=True)
