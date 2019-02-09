@@ -4,8 +4,12 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import csv
 from datetime import datetime as dt
+from datetime import timedelta
 
-f = open('2019-2-5.csv', 'r')
+now = dt.now() - timedelta(1)
+date = (str(now.year) + '-' + str(now.month) + '-' + str(now.day) + '.csv')
+
+f = open(date, 'r')
 csvfile = csv.reader(f)
 tdata = list(csvfile)
 
@@ -49,11 +53,10 @@ app.layout = html.Div(children=[
     [dash.dependencies.Input('date picker single', 'date')])
 
 def update_output(date):
-    string_prefix = 'You have selected: '
     if date is not None:
-        date = dt.strptime(date, '%Y-%m-%d')
-        date_string = date.strftime('%B %d, %Y')
-        return string_prefix + date_string
+        now = dt.now()
+        date = (str(now.year) + '-' + str(now.month) + '-' + str(now.day) + '.csv')
+    return date
 
 if __name__ == '__main__':
     app.run_server(debug=True)
