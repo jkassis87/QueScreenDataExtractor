@@ -19,7 +19,9 @@ colors = {
 app.layout = html.Div(children=[
     dcc.DatePickerSingle(
         id = 'date picker single',
-        date = dt(2019, 1, 1)),
+        min_date_allowed = dt(2019, 1, 11),
+        initial_visible_month=dt(2019, 1, 11),
+        date = dt(2019, 1, 12)),
     dcc.Graph(id = 'L1 Total',
               figure = {
                   'data': [
