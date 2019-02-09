@@ -7,10 +7,10 @@ from datetime import datetime as dt
 from datetime import timedelta
 
 now = dt.now() - timedelta(1)
-date = (str(now.year) + '-' + str(now.month) + '-' + str(now.day) + '.csv')
+date = (str(now.year) + '-' + str(now.month) + '-' + str(now.day))
 
 def get_csv(date):
-    f = open(date, 'r')
+    f = open((date + '.csv'), 'r')
     csvfile = csv.reader(f)
     tdata = list(csvfile)
     return(tdata)
@@ -50,15 +50,11 @@ app.layout = html.Div(children=[
               )
 ])
 
-@app.callback(
-    dash.dependencies.Output('output-container-date-picker-single', 'children'),
-    [dash.dependencies.Input('date picker single', 'date')])
-
-def update_output(date):
-    if date is not None:
-        now = dt.now()
-        date = (str(now.year) + '-' + str(now.month) + '-' + str(now.day) + '.csv')
-    return date
+#@app.callback(
+#    dash.dependencies.Output('output-container-date-picker-single', 'children'),
+#    [dash.dependencies.Input('date picker single', 'date')])
+#
+#get_csv(now)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
