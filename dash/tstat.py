@@ -15,7 +15,6 @@ colors = {
 }
 
 app.layout = html.Div(children=[
-    html.H1(children='Dash Tutorials'),
     dcc.Graph(id = 'L1 Total',
               figure = {
                   'data': [
