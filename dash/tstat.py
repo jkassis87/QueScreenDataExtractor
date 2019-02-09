@@ -24,8 +24,8 @@ app.layout = html.Div(children=[
     dcc.DatePickerSingle(
         id = 'date picker single',
         min_date_allowed = dt(2019, 1, 11),
-        max_date_allowed = dt(2019, 2, 19),
-        initial_visible_month=dt(2019, 1, 11),
+        max_date_allowed = now,
+        initial_visible_month = dt(2019, 1, 11),
         date = dt(2019, 1, 12)),
     html.Div(id='output-container-date-picker-single'),
     dcc.Graph(id = 'L1 Total',
