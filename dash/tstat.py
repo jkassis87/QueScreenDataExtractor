@@ -1,7 +1,9 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output
 import csv
+from datetime import datetime as dt
 
 f = open('2019-2-5.csv', 'r')
 csvfile = csv.reader(f)
@@ -15,6 +17,9 @@ colors = {
 }
 
 app.layout = html.Div(children=[
+    dcc.DatePickerSingle(
+        id = 'date picker single',
+        date = dt(2019, 1, 1)),
     dcc.Graph(id = 'L1 Total',
               figure = {
                   'data': [
