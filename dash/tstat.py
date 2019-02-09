@@ -9,33 +9,33 @@ tdata = list(csvfile)
 
 app = dash.Dash()
 
+colors = {
+    'background': '#FFFFFF',
+    'text': '#111111'
+}
+
 app.layout = html.Div(children=[
     html.H1(children='Dash Tutorials'),
     dcc.Graph(id = 'L1 Total',
               figure = {
                   'data': [
-                      {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total'},
-                      {'x': tdata[0], 'y': tdata[17], 'type': 'bar', 'name': 'Total'},
+                      {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total L1'},
+                      {'x': tdata[0], 'y': tdata[17], 'type': 'bar', 'name': 'Diff L1'},
+                      {'x': tdata[0], 'y': tdata[14], 'type': 'line', 'name': 'Total L2'},
+                      {'x': tdata[0], 'y': tdata[18], 'type': 'bar', 'name': 'Diff L2'},
+                      {'x': tdata[0], 'y': tdata[15], 'type': 'line', 'name': 'Total L3'},
+                      {'x': tdata[0], 'y': tdata[19], 'type': 'bar', 'name': 'Diff L3'},
+                      {'x': tdata[0], 'y': tdata[16], 'type': 'line', 'name': 'Total Bil'},
+                      {'x': tdata[0], 'y': tdata[20], 'type': 'bar', 'name': 'Diff Bil'},
                       ],
                   'layout': {
-                      'title': 'DP L1 Ticket Stats'
+                      'title': 'Hostopia Ticket Stats',
+                      'plot_bgcolor': colors['background'],
                       }
                   }
               )
 ])
 
-dcc.Graph(
-    id = 'L1 Total',
-    figure = {
-        'data': [
-            {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total'},
-            {'x': tdata[0], 'y': tdata[17], 'type': 'line', 'name': 'Total'},
-            ],
-        'layout': {
-            'title': 'DP L1 Ticket Stats'
-            }
-        }
-    )
 
 if __name__ == '__main__':
     app.run_server(debug=True)
