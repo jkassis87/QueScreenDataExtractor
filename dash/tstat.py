@@ -9,8 +9,8 @@ from datetime import timedelta
 now = dt.now() - timedelta(1)
 date = (str(now.year) + '-' + str(now.month) + '-' + str(now.day))
 
-def get_csv(date):
-    f = open((date + '.csv'), 'r')
+def get_csv(datestring):
+    f = open((datestring + '.csv'), 'r')
     csvfile = csv.reader(f)
     tdata = list(csvfile)
     return(tdata)
@@ -57,6 +57,7 @@ def update_output(date):
     if date is not None:
         date = dt.strptime(date, '%Y-%m-%d')
         date_string = date.strftime('%Y-%m-%e')
+        opencsv = date_string + ".csv"
         return date_string + ".csv"
 
 if __name__ == '__main__':
