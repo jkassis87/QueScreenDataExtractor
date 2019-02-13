@@ -24,12 +24,12 @@ colors = {
 
 app.layout = html.Div(children=[
     dcc.DatePickerSingle(
-        id = 'date picker single',
+        id = 'callendar-1',
         min_date_allowed = dt(2019, 1, 11),
         max_date_allowed = now,
         initial_visible_month = now,
         date = dt(2019, 1, 12)),
-    html.Div(id='output-container-date-picker-single'),
+    html.Div(id='callendar-output'),
     dcc.Graph(id = 'L1 Total',
               figure = {
                   'data': [
@@ -50,11 +50,14 @@ app.layout = html.Div(children=[
               )
 ])
 
-#@app.callback(
-#    dash.dependencies.Output('output-container-date-picker-single', 'children'),
-#    [dash.dependencies.Input('date picker single', 'date')])
-#
-#get_csv(now)
+@app.callback(
+    dash.dependencies.Output('callendar-output', 'children'),
+    [dash.dependencies.Input('callendar-1', 'date')])
+def update_output(date):
+    if date is not None:
+        date = dt.strptime(date, '%Y-%m-%d')
+        date_string = date.strftime('%Y-%m-%e')
+        return date_string + ".csv"
 
 if __name__ == '__main__':
     app.run_server(debug=True)
