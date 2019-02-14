@@ -9,6 +9,13 @@ yesterday = (str(now.year) + '-' + str(now.month) + '-' + str(now.day))
 now = datetime.now() - timedelta(2)
 beforenow = (str(now.year) + '-' + str(now.month) + '-' + str(now.day))
 
+# checks of month and year folders exist, creates them of they don't
+if isdir(str(now.year)) == False:
+    mkdir(str(now.year))
+
+if isdir(str(now.year) + "\\" + str(now.month)) == False:
+    mkdir(str(now.year) + "\\" + str(now.month))
+
 # user/pass and URL for the ticket history api
 ruser = 'X'
 rpass = '5rsMThTeZ22p3MqGpz2xRPGY5hAWrwmx'
