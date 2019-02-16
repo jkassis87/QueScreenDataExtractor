@@ -20,6 +20,12 @@ app.layout = html.Div(children=[
         max_date_allowed = dt(2019, 2, 16),
         initial_visible_month = dt(2019, 2, 16),
         date = dt(2019, 2, 15)),
+    dcc.Tabs(id="Tabs", value='Tabs', children=[
+        dcc.Tab(label='Single Day', value='tab-1'),
+        dcc.Tab(label='Compare 2 Days', value='tab-2'),
+        dcc.Tab(label='Date Range', value='tab-3'),
+        dcc.Tab(label='Compare Date Range', value='tab-4'),
+    ]),
     html.Div(id = 'callendar-output'),
     dcc.Graph(id = 'Daily-Ticket-Stats',
 #              figure = {
