@@ -5,7 +5,8 @@ from os import mkdir
 
 # gets the previos day's date in YYYY-MM-DD string
 now = datetime.now() - timedelta(1)
-yesterday = (str(now.year) + '-' + str(now.month) + '-' + str(now.day))
+nowst = datetime.strftime(now, '%Y-%m-%d')
+yesterday = (datetime.strftime(now, '%Y') + '-' + datetime.strftime(now, '%m') + '-' + datetime.strftime(now, '%d'))
 
 # checks of month/year folders exist, creates them of they don't
 if isdir(str(now.year)) == False:
@@ -16,7 +17,8 @@ if isdir(str(now.year) + "\\" + str(now.month)) == False:
 
 # for getting field 0 data from the previous date csv
 now = datetime.now() - timedelta(2)
-beforenow = (str(now.year) + '-' + str(now.month) + '-' + str(now.day))
+nowst = datetime.strftime(now, '%Y-%m-%d')
+beforenow = (datetime.strftime(now, '%Y') + '-' + datetime.strftime(now, '%m') + '-' + datetime.strftime(now, '%d'))
 
 # checks of month and year folders exist, creates them of they don't
 if isdir(str(now.year)) == False:
