@@ -1,17 +1,19 @@
-# run this script first, once. Gets the oldest ticket stats available (Jan 15 2019)
-# this is needed for difference to calculate on all other days
-
 import json, requests, csv
 from datetime import datetime, timedelta
+from os.path import isdir
+from os import mkdir, makedirs
 
-# gets the previous day's date in YYYY-MM-DD string
-now = datetime.now() - timedelta(27)
-yesterday = (str(now.year) + '-' + str(now.month) + '-' + str(now.day))
+# gets the previos day's date in YYYY-MM-DD string
+now = datetime.now() - timedelta(1)
+nowst = datetime.strftime(now, '%Y-%m-%d')
+yesterday = (datetime.strftime(now, '%Y') + '-' + datetime.strftime(now, '%m') + '-' + datetime.strftime(now, '%d'))
+
+makedirs('2019\\01')
 
 # user/pass and URL for the ticket history api
 ruser = 'X'
 rpass = '5rsMThTeZ22p3MqGpz2xRPGY5hAWrwmx'
-urltoget = (r'http://pbx02.apdcsy1.digitalpacific.com.au/tickethistory_api.php?date=2019-1-15' + yesterday)
+urltoget = (r'http://pbx02.apdcsy1.digitalpacific.com.au/tickethistory_api.php?date=2019-1-15')
 
 # grabs the ticket data and converts it from json to python dict
 getticketdata = requests.get(urltoget, auth=(ruser, rpass))
@@ -52,11 +54,15 @@ while x < 25:
     tlist[16].append(tlist[4][x] + tlist[8][x] + tlist[12][x])
     x += 1
 
-# prints the data to be saved to a csv, for self checking only
+# just to show what was done, will be removed in final
 for x in tlist:
     print(x, end='\n')
 
+#for x in yesterday_ls:
+#    print(x, end='\n')
+
 # writes new csv file with all relevant data
-with open(str(yesterday + '.csv'),'w', newline= '') as f:
+csvname = yesterday + '.csv'
+with open('2019\\01\\' + csvname,'w', newline= '') as f:
     writer = csv.writer(f)
     writer.writerows(tlist)
