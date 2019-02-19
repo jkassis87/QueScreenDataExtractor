@@ -174,12 +174,18 @@ def update_tab2a(start_date, end_date):
 def update_tab3(start_date, end_date):
 
     if end_date is not None and start_date is not None:
-        thedate = dt.strptime(end_date, '%Y-%m-%d')
-        date_string = str(thedate)
-        date_string = re.sub(' 00:00:00', '', date_string)
-        f = open((date_string + '.csv'))
-        csvfile = csv.reader(f)
-        tdata = list(csvfile)
+        thedate_start = dt.strptime(start_date, '%Y-%m-%d')
+        thedate_end = dt.strptime(end_date, '%Y-%m-%d')
+        date_string_start = str(thedate_start)
+        date_string_end = str(thedate_end)
+        date_string_start = re.sub(' 00:00:00', '', date_string_start)
+        date_string_end = re.sub(' 00:00:00', '', date_string_end)
+        f_start = open((date_string_start + '.csv'))
+        f_end = open((date_string_end + '.csv'))
+        csvfile_start = csv.reader(f_start)
+        csvfile_end = csv.reader(f_end)
+        tdata_start = list(csvfile_start)
+        tdata_end = list(csvfile_end)
         figure = {
             'data': [
                       {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
