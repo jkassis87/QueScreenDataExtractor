@@ -31,6 +31,10 @@ for idx, val in j.items():
     tlist.append(['L2', 'PA', yesterday, dayname, thour[x], 'tcount', int(val['DP']['L2'])])
     tlist.append(['L3', 'PA', yesterday, dayname, thour[x], 'tcount', int(val['DP']['L3'])])
     tlist.append(['BL', 'PA', yesterday, dayname, thour[x], 'tcount', int(val['DP']['Bil'])])
+    tlist.append(['L1', 'TT', yesterday, dayname, thour[x], 'tcount', int(tlist[x][-1] + tlist[x + 3][-1] + tlist[x + 7][-1])])
+    tlist.append(['L2', 'TT', yesterday, dayname, thour[x], 'tcount', int(tlist[x][-1] + tlist[x + 4][-1] + tlist[x + 8][-1])])
+    tlist.append(['L3', 'TT', yesterday, dayname, thour[x], 'tcount', int(tlist[x][-1] + tlist[x + 5][-1] + tlist[x + 9][-1])])
+    tlist.append(['BL', 'TT', yesterday, dayname, thour[x], 'tcount', int(tlist[x][-1] + tlist[x + 6][-1] + tlist[x + 10][-1])])
     x += 1
 
 
@@ -58,4 +62,3 @@ for x in tlist:
 
 conn.commit()
 conn.close()
-
