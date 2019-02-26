@@ -99,16 +99,18 @@ def update_tab1(date):
             'data': [
                       {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 0, 255)'}},
                       {'x': tdata[0], 'y': tdata[17], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(0, 0, 255)'}},
-                {'x': tdata[0], 'y': tdata[14], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(255, 0, 0)'}},
-                {'x': tdata[0], 'y': tdata[18], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(255, 0, 0)'}},
-                {'x': tdata[0], 'y': tdata[16], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': tdata[0], 'y': tdata[20], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': tdata[0], 'y': tdata[15], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(51, 51, 51)'}},
-                {'x': tdata[0], 'y': tdata[19], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(51, 51, 51)'}},
+                {'x': tdata[0], 'y': tdata[14], 'type': 'line', 'name': 'Total L2', 'marker': {'color': 'rgb(255, 0, 0)'}},
+                {'x': tdata[0], 'y': tdata[18], 'type': 'bar', 'name': 'Diff L3', 'marker': {'color': 'rgb(255, 0, 0)'}},
+                {'x': tdata[0], 'y': tdata[16], 'type': 'line', 'name': 'Total L3', 'marker': {'color': 'rgb(0, 255, 0)'}},
+                {'x': tdata[0], 'y': tdata[20], 'type': 'bar', 'name': 'Diff L3', 'marker': {'color': 'rgb(0, 255, 0)'}},
+                {'x': tdata[0], 'y': tdata[15], 'type': 'line', 'name': 'Total L4', 'marker': {'color': 'rgb(51, 51, 51)'}},
+                {'x': tdata[0], 'y': tdata[19], 'type': 'bar', 'name': 'Diff L4', 'marker': {'color': 'rgb(51, 51, 51)'}},
                       ],
             'layout': {
                       'title': 'Ticket Stats',
                       'plot_bgcolor': colors['background'],
+                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
+                'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
                       }
                   }
     return figure
@@ -159,6 +161,8 @@ def update_tab2a(start_date, end_date):
             'layout': {
                       'title': 'Ticket Stats',
                       'plot_bgcolor': colors['background'],
+                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
+                'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
                       }
                   }
     return figure
@@ -202,6 +206,8 @@ def update_tab3(start_date, end_date):
             'layout': {
                       'title': 'Ticket Stats',
                       'plot_bgcolor': colors['background'],
+                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
+                'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
                       }
                   }
     return figure
@@ -231,6 +237,8 @@ def update_tab4(end_date):
             'layout': {
                       'title': 'Ticket Stats',
                       'plot_bgcolor': colors['background'],
+                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
+                'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
                       }
                   }
     return figure
