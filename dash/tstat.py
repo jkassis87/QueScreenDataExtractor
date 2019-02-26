@@ -111,6 +111,7 @@ def update_tab1(date):
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
+                'legend': {'x': 1, 'y': 1}
                       }
                   }
     return figure
@@ -163,6 +164,7 @@ def update_tab2a(start_date, end_date):
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
+                'barmode': 'overlay'
                       }
                   }
     return figure
