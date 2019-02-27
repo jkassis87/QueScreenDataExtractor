@@ -100,7 +100,7 @@ def update_tab1(date):
                       {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 0, 255)'}},
                       {'x': tdata[0], 'y': tdata[17], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(0, 0, 255)'}},
                 {'x': tdata[0], 'y': tdata[14], 'type': 'line', 'name': 'Total L2', 'marker': {'color': 'rgb(255, 0, 0)'}},
-                {'x': tdata[0], 'y': tdata[18], 'type': 'bar', 'name': 'Diff L3', 'marker': {'color': 'rgb(255, 0, 0)'}},
+                {'x': tdata[0], 'y': tdata[18], 'type': 'bar', 'name': 'Diff L2', 'marker': {'color': 'rgb(255, 0, 0)'}},
                 {'x': tdata[0], 'y': tdata[16], 'type': 'line', 'name': 'Total L3', 'marker': {'color': 'rgb(0, 255, 0)'}},
                 {'x': tdata[0], 'y': tdata[20], 'type': 'bar', 'name': 'Diff L3', 'marker': {'color': 'rgb(0, 255, 0)'}},
                 {'x': tdata[0], 'y': tdata[15], 'type': 'line', 'name': 'Total L4', 'marker': {'color': 'rgb(51, 51, 51)'}},
@@ -111,7 +111,7 @@ def update_tab1(date):
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
-                'legend': {'x': 1, 'y': 1}
+                'legend': {'orientation': 'h', 'x': 0, 'y': -0.2, 'yanchor': 'top'}
                       }
                   }
     return figure
