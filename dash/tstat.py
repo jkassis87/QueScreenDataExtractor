@@ -1,4 +1,4 @@
-import dash
+import dash, dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -13,6 +13,9 @@ app = dash.Dash(__name__)
 colors = {
     'background': '#FFFFFF',
 }
+
+userpass = [["gae", "tano"]]
+auth = dash_auth.BasicAuth(app, userpass)
 
 app.layout = html.Div([
     dcc.Tabs(id="tabs", children=[
@@ -164,7 +167,8 @@ def update_tab2a(start_date, end_date):
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
-                'barmode': 'overlay'
+                'barmode': 'overlay',
+                'legend': {'orientation': 'h', 'x': 0, 'y': -0.2, 'yanchor': 'top', 'font': 14}
                       }
                   }
     return figure
