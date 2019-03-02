@@ -1,0 +1,100 @@
+import dash, dash_auth, re, csv, sqlite3
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output, State
+from datetime import datetime as dt
+from datetime import timedelta
+import pandas as pd
+
+
+app = dash.Dash(__name__)
+
+colors = {
+    'background': '#FFFFFF',
+}
+
+
+def gettdata(date):
+    conn = sqlite3.connect("tdatamaster.sqlite")
+    tlist1 = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]]
+    tteams = ["L1", "L2", "L3", "Bil"]
+    for y in tteams:
+        tstatadd = []
+        for x in range(len(tlist1[0])):
+            rr = "SELECT Stat FROM AllData WHERE Team = '" + y + "' AND Hour = " + str(x) + " AND Date = '" + date + "';"
+            df = pd.read_sql_query(rr, conn)
+            tlistdata = list(df["Stat"])
+            tcount = sum(tlistdata)
+            tstatadd.append(tcount)
+
+        tlist1.append(tstatadd)
+        tstatadd = []
+
+    return (tlist1)
+
+
+app.layout = html.Div([
+    dcc.Tabs(id="tabs", children=[
+        dcc.Tab(label='Single Day', children=[
+            html.Div([
+                dcc.DatePickerSingle(
+                    id='cal-tab1',
+                    min_date_allowed=dt(2019, 1, 15),
+                    max_date_allowed=dt(2019, 2, 16),
+                    initial_visible_month=dt(2019, 2, 16),
+                    date=dt(2019, 2, 15)),
+                dcc.Graph(
+                    id='graph-tab1',
+                )
+            ])
+        ]),
+        dcc.Tab(label='Compare 2 Days', children=[
+            dcc.DatePickerRange(
+                id='cal-tab2A',
+                min_date_allowed=dt(2019, 1, 15),
+                max_date_allowed=dt(2019, 2, 16),
+                initial_visible_month=dt(2019, 2, 16),
+                start_date=dt(2019, 1, 15),
+                end_date=dt(2019, 8, 25)
+            ),
+                dcc.Graph(
+                    id='graph-tab2',
+                )
+        ]),
+    ])
+])
+
+
+
+# callback for tab 1
+@app.callback(
+    dash.dependencies.Output('graph-tab1', 'figure'),
+    [dash.dependencies.Input('cal-tab1', 'date')]
+    )
+def update_tab1(date):
+
+    if date is not None:
+        thedate = dt.strptime(date, '%Y-%m-%d')
+        date_string = str(thedate)
+        date_string = re.sub(' 00:00:00', '', date_string)
+        tdata = gettdata(date_string)
+        figure = {
+            'data': [
+                      {'x': tdata[0], 'y': tdata[1], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 0, 255)'}},
+                {'x': tdata[0], 'y': tdata[2], 'type': 'line', 'name': 'Total L2', 'marker': {'color': 'rgb(255, 0, 0)'}},
+                {'x': tdata[0], 'y': tdata[3], 'type': 'line', 'name': 'Total L3', 'marker': {'color': 'rgb(0, 255, 0)'}},
+                {'x': tdata[0], 'y': tdata[4], 'type': 'line', 'name': 'Total Bil', 'marker': {'color': 'rgb(51, 51, 51)'}},
+            ],
+            'layout': {
+                      'title': 'Ticket Stats',
+                      'plot_bgcolor': colors['background'],
+                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
+                'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
+                'legend': {'orientation': 'h', 'x': 0, 'y': -0.2, 'yanchor': 'top'}
+                      }
+                  }
+    return figure
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
