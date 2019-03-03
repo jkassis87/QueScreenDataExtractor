@@ -34,6 +34,14 @@ def gettdata(date):
 
     return (tlist1)
 
+def format_date(datest):
+    thedate = dt.strptime(datest, '%Y-%m-%d')
+    date_string = str(thedate)
+    date_string = re.sub(' 00:00:00', '', date_string)
+    return(date_string)
+
+
+
 
 app.layout = html.Div([
     dcc.Tabs(id="tabs", children=[
@@ -110,10 +118,7 @@ app.layout = html.Div([
 def update_tab1(date):
 
     if date is not None:
-        thedate = dt.strptime(date, '%Y-%m-%d')
-        date_string = str(thedate)
-        date_string = re.sub(' 00:00:00', '', date_string)
-        tdata = gettdata(date_string)
+        tdata = gettdata(format_date(date))
         figure = {
             'data': [
                       {'x': tdata[0], 'y': tdata[1], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 0, 255)'}},
@@ -143,24 +148,18 @@ def update_tab1(date):
 def update_tab2a(start_date, end_date):
 
     if start_date is not None and end_date is not None:
-        thedatestart = dt.strptime(start_date, '%Y-%m-%d')
-        date_stringstart = str(thedatestart)
-        date_stringstart = re.sub(' 00:00:00', '', date_stringstart)
-        tdatastart = gettdata(date_stringstart)
-        thedateend = dt.strptime(end_date, '%Y-%m-%d')
-        date_stringend = str(thedateend)
-        date_stringend = re.sub(' 00:00:00', '', date_stringend)
-        tdataend = gettdata(date_stringend)
+        tdata_start = gettdata(format_date(start_date))
+        tdata_end = gettdata(format_date(end_date))
         figure = {
             'data': [
-                      {'x': tdatastart[0], 'y': tdatastart[1], 'type': 'line', 'name': 'Total L1 - A', 'marker': {'color': 'rgb(0, 0, 255)'}},
-                {'x': tdataend[0], 'y': tdataend[1], 'type': 'line', 'name': 'Total L1 - B', 'marker': {'color': 'rgba(0, 0, 255, .6)'}},
-                {'x': tdatastart[0], 'y': tdatastart[2], 'type': 'line', 'name': 'Total L2 - A', 'marker': {'color': 'rgb(255, 0, 0)'}},
-                {'x': tdataend[0], 'y': tdataend[2], 'type': 'line', 'name': 'Total L2 - B', 'marker': {'color': 'rgba(255, 0, 0, .6)'}},
-                {'x': tdatastart[0], 'y': tdatastart[3], 'type': 'line', 'name': 'Total L3 - A', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': tdataend[0], 'y': tdataend[3], 'type': 'line', 'name': 'Total L3 - B', 'marker': {'color': 'rgba(0, 255, 0, .6)'}},
-                {'x': tdatastart[0], 'y': tdatastart[4], 'type': 'line', 'name': 'Total Bil - A', 'marker': {'color': 'rgb(51, 51, 51)'}},
-                {'x': tdataend[0], 'y': tdataend[4], 'type': 'line', 'name': 'Total Bil - B', 'marker': {'color': 'rgba(51, 51, 51, .6)'}},
+                      {'x': tdata_start[0], 'y': tdata_start[1], 'type': 'line', 'name': 'Total L1 - A', 'marker': {'color': 'rgb(0, 0, 255)'}},
+                {'x': tdata_end[0], 'y': tdata_end[1], 'type': 'line', 'name': 'Total L1 - B', 'marker': {'color': 'rgba(0, 0, 255, .6)'}},
+                {'x': tdata_start[0], 'y': tdata_start[2], 'type': 'line', 'name': 'Total L2 - A', 'marker': {'color': 'rgb(255, 0, 0)'}},
+                {'x': tdata_end[0], 'y': tdata_end[2], 'type': 'line', 'name': 'Total L2 - B', 'marker': {'color': 'rgba(255, 0, 0, .6)'}},
+                {'x': tdata_start[0], 'y': tdata_start[3], 'type': 'line', 'name': 'Total L3 - A', 'marker': {'color': 'rgb(0, 255, 0)'}},
+                {'x': tdata_end[0], 'y': tdata_end[3], 'type': 'line', 'name': 'Total L3 - B', 'marker': {'color': 'rgba(0, 255, 0, .6)'}},
+                {'x': tdata_start[0], 'y': tdata_start[4], 'type': 'line', 'name': 'Total Bil - A', 'marker': {'color': 'rgb(51, 51, 51)'}},
+                {'x': tdata_end[0], 'y': tdata_end[4], 'type': 'line', 'name': 'Total Bil - B', 'marker': {'color': 'rgba(51, 51, 51, .6)'}},
             ],
             'layout': {
                       'title': 'Ticket Stats',
@@ -183,26 +182,8 @@ def update_tab2a(start_date, end_date):
 def update_tab3(start_date, end_date):
 
     if end_date is not None and start_date is not None:
-        thedate_start = dt.strptime(start_date, '%Y-%m-%d')
-        date_string_start = str(thedate_start)
-        date_string_start = re.sub(' 00:00:00', '', date_string_start)
-        x = dt(int(date_string_start[0:4]), int(date_string_start[5:7]), int(date_string_start[8:10]))
-        thedate_end = dt.strptime(end_date, '%Y-%m-%d')
-        date_string_end = str(thedate_end)
-        date_string_end = re.sub(' 00:00:00', '', date_string_end)
-        y = dt(int(date_string_end[0:4]), int(date_string_end[5:7]), int(date_string_end[8:10]))
-        tdata = []
-        while y >= x:
-            thedate_x = str(x)
-            thedate_x = re.sub(' 00:00:00', '', thedate_x)
-            thedate = dt.strptime(thedate_x, '%Y-%m-%d')
-            date_string = str(thedate)
-            date_string = re.sub(' 00:00:00', '', date_string)
-            f = open((date_string + '.csv'))
-            csvfile = csv.reader(f)
-            csvlist = list(csvfile)
-            tdata.extend(csvlist)
-            x = x + timedelta(1)
+        tdata_start = gettdata(format_date(start_date))
+        tdata_end = gettdata(format_date(end_date))
         figure = {
             'data': [
                       {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
@@ -222,18 +203,14 @@ def update_tab3(start_date, end_date):
 # callback for tab 4
 @app.callback(
     dash.dependencies.Output('graph-tab4', 'figure'),
-    [dash.dependencies.Input('cal-tab4A', 'end_date'),
+    [dash.dependencies.Input('cal-tab4A', 'start_date'),
      dash.dependencies.Input('cal-tab4B', 'end_date')]
     )
-def update_tab4(end_date):
+def update_tab4(start_date, end_date):
 
     if end_date is not None:
-        thedate = dt.strptime(end_date, '%Y-%m-%d')
-        date_string = str(thedate)
-        date_string = re.sub(' 00:00:00', '', date_string)
-        f = open((date_string + '.csv'))
-        csvfile = csv.reader(f)
-        tdata = list(csvfile)
+        tdata_start = gettdata(format_date(start_date))
+        tdata_end = gettdata(format_date(end_date))
         figure = {
             'data': [
                       {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
