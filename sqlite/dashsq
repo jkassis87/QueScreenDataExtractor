@@ -33,6 +33,20 @@ def gettdata(date):
         tlist1.append(tstatadd)
         tstatadd = []
 
+    tlist1d = [[], [], [], []]
+    tlist1 = tlist1 + tlist1d
+    for thour in range(len(tlist1[0])):
+        if thour == 0:
+            tlist1[5].append(0)
+            tlist1[6].append(0)
+            tlist1[7].append(0)
+            tlist1[8].append(0)
+        else:
+            tlist1[5].append(tlist1[1][thour] - tlist1[1][(thour - 1)])
+            tlist1[6].append(tlist1[2][thour] - tlist1[2][(thour - 1)])
+            tlist1[7].append(tlist1[3][thour] - tlist1[3][(thour - 1)])
+            tlist1[8].append(tlist1[4][thour] - tlist1[4][(thour - 1)])
+
     return (tlist1)
 
 def format_date(datest):
@@ -123,9 +137,13 @@ def update_tab1(date):
         figure = {
             'data': [
                       {'x': tdata[0], 'y': tdata[1], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 0, 255)'}},
+                {'x': tdata[0], 'y': tdata[5], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(0, 0, 255)'}},
                 {'x': tdata[0], 'y': tdata[2], 'type': 'line', 'name': 'Total L2', 'marker': {'color': 'rgb(255, 0, 0)'}},
+                {'x': tdata[0], 'y': tdata[6], 'type': 'bar', 'name': 'Diff L2', 'marker': {'color': 'rgb(255, 0, 0'}},
                 {'x': tdata[0], 'y': tdata[3], 'type': 'line', 'name': 'Total L3', 'marker': {'color': 'rgb(0, 255, 0)'}},
+                {'x': tdata[0], 'y': tdata[7], 'type': 'bar', 'name': 'Diff L3', 'marker': {'color': 'rgb(0, 255, 0)'}},
                 {'x': tdata[0], 'y': tdata[4], 'type': 'line', 'name': 'Total Bil', 'marker': {'color': 'rgb(51, 51, 51)'}},
+                {'x': tdata[0], 'y': tdata[8], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(51, 51, 51)'}},
             ],
             'layout': {
                       'title': 'Ticket Stats',
@@ -154,20 +172,29 @@ def update_tab2a(start_date, end_date):
         figure = {
             'data': [
                       {'x': tdata_start[0], 'y': tdata_start[1], 'type': 'line', 'name': 'Total L1 - A', 'marker': {'color': 'rgb(0, 0, 255)'}},
+                {'x': tdata_start[0], 'y': tdata_start[5], 'type': 'bar', 'name': 'Diff L1 - A', 'marker': {'color': 'rgb(0, 0, 255)'}},
                 {'x': tdata_end[0], 'y': tdata_end[1], 'type': 'line', 'name': 'Total L1 - B', 'marker': {'color': 'rgba(0, 0, 255, .6)'}},
+                {'x': tdata_end[0], 'y': tdata_end[5], 'type': 'bar', 'name': 'Diff L1 - B', 'marker': {'color': 'rgba(0, 0, 255, .6)'}},
                 {'x': tdata_start[0], 'y': tdata_start[2], 'type': 'line', 'name': 'Total L2 - A', 'marker': {'color': 'rgb(255, 0, 0)'}},
+                {'x': tdata_start[0], 'y': tdata_start[6], 'type': 'bar', 'name': 'Diff L2 - A', 'marker': {'color': 'rgb(255, 0, 0)'}},
                 {'x': tdata_end[0], 'y': tdata_end[2], 'type': 'line', 'name': 'Total L2 - B', 'marker': {'color': 'rgba(255, 0, 0, .6)'}},
+                {'x': tdata_end[0], 'y': tdata_end[6], 'type': 'bar', 'name': 'Diff L2 - B', 'marker': {'color': 'rgba(255, 0, 0, .6)'}},
                 {'x': tdata_start[0], 'y': tdata_start[3], 'type': 'line', 'name': 'Total L3 - A', 'marker': {'color': 'rgb(0, 255, 0)'}},
+                {'x': tdata_start[0], 'y': tdata_start[7], 'type': 'bar', 'name': 'Diff L3 - A', 'marker': {'color': 'rgb(0, 255, 0)'}},
                 {'x': tdata_end[0], 'y': tdata_end[3], 'type': 'line', 'name': 'Total L3 - B', 'marker': {'color': 'rgba(0, 255, 0, .6)'}},
+                {'x': tdata_end[0], 'y': tdata_end[7], 'type': 'bar', 'name': 'Diff L3 - B', 'marker': {'color': 'rgba(0, 255, 0, .6)'}},
                 {'x': tdata_start[0], 'y': tdata_start[4], 'type': 'line', 'name': 'Total Bil - A', 'marker': {'color': 'rgb(51, 51, 51)'}},
+                {'x': tdata_start[0], 'y': tdata_start[8], 'type': 'bar', 'name': 'Diff Bil - A', 'marker': {'color': 'rgb(51, 51, 51)'}},
                 {'x': tdata_end[0], 'y': tdata_end[4], 'type': 'line', 'name': 'Total Bil - B', 'marker': {'color': 'rgba(51, 51, 51, .6)'}},
+                {'x': tdata_end[0], 'y': tdata_end[8], 'type': 'bar', 'name': 'Diff Bil - B', 'marker': {'color': 'rgba(51, 51, 51, .6)'}},
             ],
             'layout': {
                       'title': 'Ticket Stats',
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
-                'legend': {'orientation': 'h', 'x': 0, 'y': -0.2, 'yanchor': 'top'}
+                'legend': {'orientation': 'h', 'x': 0, 'y': -0.2, 'yanchor': 'top'},
+                'barmode': 'overlay'
                       }
                   }
     return figure
