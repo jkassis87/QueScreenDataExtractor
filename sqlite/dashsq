@@ -49,6 +49,7 @@ def gettdata(date):
 
     return (tlist1)
 
+
 def format_date(datest):
     thedate = dt.strptime(datest, '%Y-%m-%d')
     date_string = str(thedate)
@@ -56,6 +57,27 @@ def format_date(datest):
     return(date_string)
 
 
+def get_date_range(start_date, end_date):
+    tdata = [[], [], [], [], [], [], [], [], []]
+
+    start_datex = dt(int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]))
+    end_datex = dt(int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]))
+
+    while start_datex <= end_datex:
+        tdatax = gettdata(format_date(start_date))
+        tdata[0].extend(tdatax[0])
+        tdata[1].extend(tdatax[1])
+        tdata[2].extend(tdatax[2])
+        tdata[3].extend(tdatax[3])
+        tdata[4].extend(tdatax[4])
+        tdata[5].extend(tdatax[5])
+        tdata[6].extend(tdatax[6])
+        tdata[7].extend(tdatax[7])
+        tdata[8].extend(tdatax[8])
+
+        start_datex += timedelta(days=1)
+
+    return(tdata)
 
 
 app.layout = html.Div([
@@ -210,18 +232,25 @@ def update_tab2a(start_date, end_date):
 def update_tab3(start_date, end_date):
 
     if end_date is not None and start_date is not None:
-        tdata_start = gettdata(format_date(start_date))
-        tdata_end = gettdata(format_date(end_date))
+        tdata = get_date_range(start_date, end_date)
         figure = {
             'data': [
-                      {'x': tdata[0], 'y': tdata[13], 'type': 'line', 'name': 'Total L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
-                      {'x': tdata[0], 'y': tdata[17], 'type': 'bar', 'name': 'Diff L1', 'marker': {'color': 'rgb(0, 89, 234)'}},
+                {'x': tdata[0], 'y': tdata[1], 'type': 'line', 'name': 'Total L1', 'legendgroup': 'Level 1', 'marker': {'color': 'rgb(0, 0, 255)'}},
+                #{'x': tdata[0], 'y': tdata[5], 'type': 'bar', 'name': 'Diff L1', 'legendgroup': 'Level 1', 'marker': {'color': 'rgb(0, 0, 255)'}},
+                {'x': tdata[0], 'y': tdata[2], 'type': 'line', 'name': 'Total L2', 'legendgroup': 'Level 2', 'marker': {'color': 'rgb(255, 0, 0)'}},
+                #{'x': tdata[0], 'y': tdata[6], 'type': 'bar', 'name': 'Diff L2', 'legendgroup': 'Level 2', 'marker': {'color': 'rgb(255, 0, 0'}},
+                {'x': tdata[0], 'y': tdata[3], 'type': 'line', 'name': 'Total L3', 'legendgroup': 'Level 3', 'marker': {'color': 'rgb(0, 255, 0)'}},
+                #{'x': tdata[0], 'y': tdata[7], 'type': 'bar', 'name': 'Diff L3', 'legendgroup': 'Level 3', 'marker': {'color': 'rgb(0, 255, 0)'}},
+                {'x': tdata[0], 'y': tdata[4], 'type': 'line', 'name': 'Total Bil', 'legendgroup': 'Billing', 'marker': {'color': 'rgb(51, 51, 51)'}},
+                #{'x': tdata[0], 'y': tdata[8], 'type': 'bar', 'name': 'Diff Bil', 'legendgroup': 'Billing', 'marker': {'color': 'rgb(51, 51, 51)'}},
                       ],
             'layout': {
                       'title': 'Ticket Stats',
                       'plot_bgcolor': colors['background'],
-                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
+                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 2},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
+                'legend': {'orientation': 'h', 'x': 0, 'y': -0.2, 'yanchor': 'top'},
+                'barmode': 'overlay'
                       }
                   }
     return figure
