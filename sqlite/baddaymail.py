@@ -1,6 +1,5 @@
 # This script runs 1hr after the data gets colected, calcs averages over past 6
 # of the same day, emails team leaders if most recent tcount was 50% greater than average
-
 import dash, dash_auth, re, csv, sqlite3
 from datetime import datetime as dt
 from datetime import timedelta
@@ -30,24 +29,10 @@ def gettdata(date):
             tstatadd.append(tcount)
 
         tlist1.append(tstatadd)
-        tstatadd = []
-
-    tlist1d = [[], [], [], []]
-    tlist1 = tlist1 + tlist1d
-    for thour in range(len(tlist1[0])):
-        if thour == 0:
-            tlist1[5].append(0)
-            tlist1[6].append(0)
-            tlist1[7].append(0)
-            tlist1[8].append(0)
-        else:
-            tlist1[5].append(tlist1[1][thour] - tlist1[1][(thour - 1)])
-            tlist1[6].append(tlist1[2][thour] - tlist1[2][(thour - 1)])
-            tlist1[7].append(tlist1[3][thour] - tlist1[3][(thour - 1)])
-            tlist1[8].append(tlist1[4][thour] - tlist1[4][(thour - 1)])
 
     return (tlist1)
 
+tdata_today = gettdata(start_str)
 
 while end_date <= start_date:
     if end_date.today().weekday() == dayofweek:
@@ -58,12 +43,8 @@ while end_date <= start_date:
         tdata[2].extend(tdatax[2])
         tdata[3].extend(tdatax[3])
         tdata[4].extend(tdatax[4])
-        tdata[5].extend(tdatax[5])
-        tdata[6].extend(tdatax[6])
-        tdata[7].extend(tdatax[7])
-        tdata[8].extend(tdatax[8])
 
     end_date += timedelta(days=1)
 
-for x in tdata:
+for x in tdata_today:
     print(x, end='\n')
