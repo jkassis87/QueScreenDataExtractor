@@ -12,9 +12,12 @@ end_date = dt.now() - timedelta(days=43)
 end_str = dt.strftime(end_date, '%Y-%m-%d')
 dayofweek = start_date.today().weekday()
 
+# template ticket for last 6wks of data
 tdata = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
          [], [], [], []]
 
+
+# this function pulls ticket data from the db, calcs totals and returns the list
 def gettdata(date):
     conn = sqlite3.connect("tdatamaster.sqlite")
     tlist1 = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]]
@@ -32,8 +35,10 @@ def gettdata(date):
 
     return (tlist1)
 
+# gets ticket data for yesterday
 tdata_today = gettdata(start_str)
 
+# gets ticket data for the last 6wks of yesterday's day
 while end_date <= start_date:
     if end_date.today().weekday() == dayofweek:
         end_str = dt.strftime(end_date, '%Y-%m-%d')
@@ -46,14 +51,16 @@ while end_date <= start_date:
 
     end_date += timedelta(days=1)
 
+# averages are calulated here and added to a dict
 def average(thedata):
     return(sum(thedata) / len(thedata))
 
-for x in tdata:
-    print(average(x), end='\n')
+average_stats = {'sixweeks': {'L1': average(tdata[1]), 'L2': average(tdata[2]),
+                              'L3': average(tdata[3]), 'Bil': average(tdata[4])},
+                 'yesterday': {'L1': average(tdata_today[1]), 'L2': average(tdata_today[2]),
+                              'L3': average(tdata_today[3]), 'Bil': average(tdata_today[4])}
+                 }
 
-for x in tdata_today:
-    print(average(x), end='\n')
 
 # details for the email to send from
 from_email = 'pytest@yourdomain.net.au'
@@ -61,9 +68,11 @@ email_pw = '0ognxm1uv3bu'
 smtp_server = 'mail.yourdomain.net.au'
 port = 465
 
-team_leaders = {'L1': 'rajan.shrestha@hostopia.com.au',
-                'L2': 'gaetano.egisto@hostopia.com.au',
-                'Bil': 'cameron.muir@hostopia.com.au'}
+# dict containing team leader names, department name, and email address
+team_leaders = {'L1': {'name': 'Rajan', 'dept': 'Level 1', 'email_adr':'rajan.shrestha@hostopia.com.au'},
+                'L2': {'name': 'Gaetano', 'dept': 'Level 2', 'email_adr':'gaetano.egisto@hostopia.com.au'},
+                'Bil': {'name': 'Cameron', 'dept': 'Billing', 'email_adr':'cameron.muir@hostopia.com.au'}
+                }
 
 
 # Create a secure SSL context
@@ -71,8 +80,16 @@ context = ssl.create_default_context()
 
 with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
     server.login(from_email, email_pw)
-
+# formats the email
 sender_email = 'pytest@yourdomain.net.au'
 reciever_email = 'j17747@gmail.com'
-email_message = """Hello Human"""
+email_message = """Hello {},
+            Tickets yesterday were higher than average for {}.
+    
+            Average for past 6wks: {}
+            Average yesterday: {}
+    
+            Regards,""".format(team_leaders['L1']['name'], team_leaders['L1']['dept'],
+                               average_stats['sixweeks']['L1'], average_stats['yesterday']['L1'])
+
 
