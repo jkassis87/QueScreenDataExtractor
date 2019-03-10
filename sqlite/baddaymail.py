@@ -25,7 +25,8 @@ def gettdata(date):
     for y in tteams:
         tstatadd = []
         for x in range(len(tlist1[0])):
-            rr = "SELECT Stat FROM AllData WHERE Team = '" + y + "' AND Hour = " + str(x) + " AND Date = '" + date + "';"
+            rr = "SELECT Stat FROM AllData WHERE Team = '" + y + "' AND Hour = " + str(
+                x) + " AND Date = '" + date + "';"
             df = pd.read_sql_query(rr, conn)
             tlistdata = list(df["Stat"])
             tcount = sum(tlistdata)
@@ -34,6 +35,7 @@ def gettdata(date):
         tlist1.append(tstatadd)
 
     return (tlist1)
+
 
 # gets ticket data for yesterday
 tdata_today = gettdata(start_str)
@@ -51,45 +53,56 @@ while end_date <= start_date:
 
     end_date += timedelta(days=1)
 
+
 # averages are calulated here and added to a dict
 def average(thedata):
-    return(sum(thedata) / len(thedata))
+    return (sum(thedata) / len(thedata))
+
 
 average_stats = {'sixweeks': {'L1': average(tdata[1]), 'L2': average(tdata[2]),
                               'L3': average(tdata[3]), 'Bil': average(tdata[4])},
                  'yesterday': {'L1': average(tdata_today[1]), 'L2': average(tdata_today[2]),
-                              'L3': average(tdata_today[3]), 'Bil': average(tdata_today[4])}
+                               'L3': average(tdata_today[3]), 'Bil': average(tdata_today[4])}
                  }
 
-
-# details for the email to send from
-from_email = 'pytest@yourdomain.net.au'
-email_pw = '0ognxm1uv3bu'
-smtp_server = 'mail.yourdomain.net.au'
-port = 465
-
 # dict containing team leader names, department name, and email address
-team_leaders = {'L1': {'name': 'Rajan', 'dept': 'Level 1', 'email_adr':'rajan.shrestha@hostopia.com.au'},
-                'L2': {'name': 'Gaetano', 'dept': 'Level 2', 'email_adr':'gaetano.egisto@hostopia.com.au'},
-                'Bil': {'name': 'Cameron', 'dept': 'Billing', 'email_adr':'cameron.muir@hostopia.com.au'}
+team_leaders = {'L1': {'name': 'Rajan', 'dept': 'Level 1', 'email': 'rajan.shrestha@hostopia.com.au'},
+                'L2': {'name': 'Gaetano', 'dept': 'Level 2', 'email': 'gaetano.egisto@hostopia.com.au'},
+                'Bil': {'name': 'Cameron', 'dept': 'Billing', 'email': 'cameron.muir@hostopia.com.au'}
                 }
 
 
-# Create a secure SSL context
-context = ssl.create_default_context()
+def send_email(to_email, name, dept, av_six, av_today):
+    # details for the email to send from
+    from_email = 'pytest@yourdomain.net.au'
+    email_pw = '0ognxm1uv3bu'
+    smtp_server = 'mail.yourdomain.net.au'
+    port = 465
 
-with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-    server.login(from_email, email_pw)
-# formats the email
-sender_email = 'pytest@yourdomain.net.au'
-reciever_email = 'j17747@gmail.com'
-email_message = """Hello {},
-            Tickets yesterday were higher than average for {}.
-    
-            Average for past 6wks: {}
-            Average yesterday: {}
-    
-            Regards,""".format(team_leaders['L1']['name'], team_leaders['L1']['dept'],
-                               average_stats['sixweeks']['L1'], average_stats['yesterday']['L1'])
+    email_message = """Hello {},
+                Tickets yesterday were higher than average for {}.
+        
+                Average for past 6wks: {}
+                Average yesterday: {}
+        
+                Regards,""".format(name, dept, av_six, av_today)
+
+    # Create a secure SSL context
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        server.login(from_email, email_pw)
+        server.sendmail(from_email, to_email, email_message)
 
 
+
+if average_stats['yesterday']['L1'] < (average_stats['sixweeks']['L1'] * 1.3):
+    send_email(team_leaders['Bil']['email'], team_leaders['L1']['name'], team_leaders['L1']['dept'],
+               average_stats['sixweeks']['L1'], average_stats['yesterday']['L1'])
+
+if average_stats['yesterday']['L2'] < (average_stats['sixweeks']['L2'] * 1.3):
+    send_email(team_leaders['Bil']['email'], team_leaders['L2']['name'], team_leaders['L2']['dept'],
+               average_stats['sixweeks']['L2'], average_stats['yesterday']['L2'])
+
+if average_stats['yesterday']['Bil'] < (average_stats['sixweeks']['Bil'] * 1.3):
+    send_email(team_leaders['Bil']['email'], team_leaders['Bil']['name'], team_leaders['Bil']['dept'],
+               average_stats['sixweeks']['Bil'], average_stats['yesterday']['Bil'])
