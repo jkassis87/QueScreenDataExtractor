@@ -1,7 +1,7 @@
 # This script runs 1hr after the data gets colected, calcs averages over past 6
 # of the same day, emails team leaders if most recent tcount was 50% greater than average
 
-import dash, dash_auth, re, csv, sqlite3
+import sqlite3, smtplib, ssl
 from datetime import datetime as dt
 from datetime import timedelta
 import pandas as pd
@@ -11,7 +11,6 @@ start_str = dt.strftime(start_date, '%Y-%m-%d')
 end_date = dt.now() - timedelta(days=43)
 end_str = dt.strftime(end_date, '%Y-%m-%d')
 dayofweek = start_date.today().weekday()
-
 
 tdata = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
          [], [], [], []]
@@ -55,3 +54,25 @@ for x in tdata:
 
 for x in tdata_today:
     print(average(x), end='\n')
+
+# details for the email to send from
+from_email = 'pytest@yourdomain.net.au'
+email_pw = '0ognxm1uv3bu'
+smtp_server = 'mail.yourdomain.net.au'
+port = 465
+
+team_leaders = {'L1': 'rajan.shrestha@hostopia.com.au',
+                'L2': 'gaetano.egisto@hostopia.com.au',
+                'Bil': 'cameron.muir@hostopia.com.au'}
+
+
+# Create a secure SSL context
+context = ssl.create_default_context()
+
+with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+    server.login(from_email, email_pw)
+
+sender_email = 'pytest@yourdomain.net.au'
+reciever_email = 'j17747@gmail.com'
+email_message = """Hello Human"""
+
