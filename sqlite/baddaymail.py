@@ -1,5 +1,6 @@
 # This script runs 1hr after the data gets colected, calcs averages over past 6
 # of the same day, emails team leaders if most recent tcount was 50% greater than average
+
 import dash, dash_auth, re, csv, sqlite3
 from datetime import datetime as dt
 from datetime import timedelta
@@ -13,7 +14,7 @@ dayofweek = start_date.today().weekday()
 
 
 tdata = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-         [], [], [], [], [], [], [], [], []]
+         [], [], [], []]
 
 def gettdata(date):
     conn = sqlite3.connect("tdatamaster.sqlite")
@@ -46,5 +47,11 @@ while end_date <= start_date:
 
     end_date += timedelta(days=1)
 
+def average(thedata):
+    return(sum(thedata) / len(thedata))
+
+for x in tdata:
+    print(average(x), end='\n')
+
 for x in tdata_today:
-    print(x, end='\n')
+    print(average(x), end='\n')
