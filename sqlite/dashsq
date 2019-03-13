@@ -1,3 +1,5 @@
+#!/home/tstatsdp/public_html/live/bin/python3
+
 import dash, dash_auth, re, csv, sqlite3
 import dash_core_components as dcc
 import dash_html_components as html
@@ -5,6 +7,7 @@ from dash.dependencies import Input, Output, State
 from datetime import datetime as dt
 from datetime import timedelta
 import pandas as pd
+
 
 now = dt.now() - timedelta(1)
 
@@ -18,7 +21,7 @@ userpass = [["gae", "tano"]]
 auth = dash_auth.BasicAuth(app, userpass)
 
 def gettdata(date):
-    conn = sqlite3.connect("tdatamaster.sqlite")
+    conn = sqlite3.connect("/home/tstatsdp/public_html/live/tdatamaster.sqlite")
     tlist1 = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]]
     tteams = ["L1", "L2", "L3", "Bil"]
     for y in tteams:
@@ -235,7 +238,7 @@ def update_tab2a(start_date, end_date):
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(255, 0, 255)'}},
             ],
             'layout': {
-                      'title': 'Ticket Stats for ' + format_date(start_date) + ' and ' + format_date(end_date),
+                      'title': 'Ticket Stats for A - ' + format_date(start_date) + ' and B - ' + format_date(end_date),
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
@@ -314,6 +317,13 @@ def update_tab4(start_date, end_date):
                   }
     return figure
 
+def run_server(self,
+               port=80,
+               debug=True,
+               threaded=True,
+               **flask_run_options):
+    self.server.run(port=port, debug=debug, **flask_run_options)
+
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+        app.run_server(host='tstats.digitalpacific.com.au',debug=True)
