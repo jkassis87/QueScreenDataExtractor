@@ -1,6 +1,7 @@
 import sqlite3, json, requests, csv
 from datetime import datetime, timedelta, date
 
+# gets timestamps to use
 now = datetime.now() - timedelta(1)
 nowst = datetime.strftime(now, '%Y-%m-%d')
 yesterday = (datetime.strftime(now, '%Y') + '-' + datetime.strftime(now, '%m') + '-' + datetime.strftime(now, '%d'))
@@ -12,9 +13,11 @@ urltoget = (r'http://pbx02.apdcsy1.digitalpacific.com.au/tickethistory_api.php?d
 getticketdata = requests.get(urltoget, auth=(ruser, rpass))
 j = json.loads(getticketdata.text)
 
+# creates initial lists
 thour = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
 tlist = []
 
+# adds values to list
 x = 0
 for idx, val in j.items():
     tlist.append(['L1', 'DP', yesterday, thour[x], int(val['DP']['L1'])])
@@ -32,22 +35,13 @@ for idx, val in j.items():
     x += 1
 
 # name of the sqlite database file
-sqlite_file = 'tdata4.sqlite'    
+sqlite_file = '/home/tstatsdp/public_html/live/tdatadb.sqlite'
 
 # Connecting to the database file
 conn = sqlite3.connect(sqlite_file)
 c = conn.cursor()
 
-# Creating a new SQLite table with 1 column
-c.execute(r'''CREATE TABLE AllData(
-Team Text,
-Brand Text,
-Date Text,
-Hour Text,
-Stat Int
-);
-''')
-
+# add data to db file
 for x in tlist:
     c.execute('INSERT INTO AllData VALUES (?,?,?,?,?)', x)
 
