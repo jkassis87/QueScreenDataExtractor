@@ -44,17 +44,22 @@ def gettdata(date):
 
     tlist1d = [[], [], [], []]
     tlist1 = tlist1 + tlist1d
-    for thour in range(len(tlist1[0])):
-        if thour == 0:
+    for key, val in enumerate(tlist1[0]):
+        if x[9:11] == '00':
             tlist1[5].append(0)
             tlist1[6].append(0)
             tlist1[7].append(0)
             tlist1[8].append(0)
         else:
-            tlist1[5].append(tlist1[1][thour] - tlist1[1][(thour - 1)])
-            tlist1[6].append(tlist1[2][thour] - tlist1[2][(thour - 1)])
-            tlist1[7].append(tlist1[3][thour] - tlist1[3][(thour - 1)])
-            tlist1[8].append(tlist1[4][thour] - tlist1[4][(thour - 1)])
+            tlist1[5].append(tlist1[1][x] - tlist1[1][int(x[9:11] - 1)])
+            tlist1[6].append(tlist1[2][x] - tlist1[2][int(x[9:11] - 1)])
+            tlist1[7].append(tlist1[3][x] - tlist1[3][int(x[9:11] - 1)])
+            tlist1[8].append(tlist1[4][x] - tlist1[4][int(x[9:11] - 1)])
+
+    #tlistc = [x.encode('utf-8') for x in items]
+    #with open('dump.csv', 'wb') as myfile:
+        #wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+        #wr.writerow(tlist1.o)
 
     return (tlist1)
 
@@ -188,8 +193,7 @@ def update_tab1(date):
             'layout': {
                       'title': 'Ticket Stats For ' + str(date),
                       'plot_bgcolor': colors['background'],
-                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1,
-                          'tickformat': '%Y-%m-%d %H:%M:%S', 'type': 'date'},
+                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
                 'legend': {'orientation': 'h', 'x': 0, 'y': -0.2, 'yanchor': 'top'}
                       }
