@@ -36,7 +36,9 @@ dateutil
 0	6	*	*	*	/home/tstatsdp/public_html/live/bin/python3.5 /home/tstatsdp/public_html/live/tstats.py
 
 NOTE1: The first cron insert's the previous day's ticket data into the .sqlite file
+
 NOTE2: The second cron runs/restarts the front end
+
 
 3)  Once the tstats.py file is running, visit tstats.digitalpacific.com.au:8050 to access the app
     If needed, the hostname can be changed by modifying the "app.run_server(host=" line in tstats.py
