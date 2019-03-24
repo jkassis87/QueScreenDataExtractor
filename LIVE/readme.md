@@ -4,12 +4,19 @@ Requires Python 3.5+
 
 
 =====3rd Party Modules Required=====
+
 dash
+
 dash_auth
+
 dash_core_components
+
 dash_html_components
+
 numpy
+
 pandas
+
 dateutil
 
 
