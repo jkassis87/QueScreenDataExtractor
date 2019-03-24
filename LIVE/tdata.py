@@ -10,16 +10,23 @@ from datetime import date as dtm
 import pandas as pd
 from dateutil import parser
 
+# creates datetime object for yesterday's date
 now = dt.now() - timedelta(1)
+
+# creates dash app
 app = dash.Dash(__name__)
 
+# global style settings can be added here
 colors = {
     'background': '#FFFFFF',
 }
 
+
+# authentication
 userpass = [["gae", "tano"]]
 auth = dash_auth.BasicAuth(app, userpass)
 
+# funtion for grabbing ticket data
 def gettdata(date):
     conn = sqlite3.connect("/home/tstatsdp/public_html/live/tdatadb.sqlite")
     tlist1 = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]]
@@ -53,13 +60,15 @@ def gettdata(date):
     return (tlist1)
 
 
+# formats date from datetime object to string, used for calendar callbacks
 def format_date(datest):
     thedate = dt.strptime(datest, '%Y-%m-%d')
     date_string = str(thedate)
     date_string = re.sub(' 00:00:00', '', date_string)
     return(date_string)
 
-
+# function got getting a date range
+# INCOMPLETE / Not Used Currently 
 def get_date_range(start_date, end_date):
     tdata = [[], [], [], [], [], [], [], [], []]
 
@@ -82,7 +91,7 @@ def get_date_range(start_date, end_date):
 
     return(tdata)
 
-
+# Creates the main app, adds tabs, basic labels, and calendars
 app.layout = html.Div([
     dcc.Tabs(id="tabs", children=[
         dcc.Tab(label='Single Day', children=[
@@ -116,7 +125,7 @@ app.layout = html.Div([
 
 
 
-# callback for tab 1
+# callback for tab 1, returns the data for the dates selected in the calendar
 @app.callback(
     dash.dependencies.Output('graph-tab1', 'figure'),
     [dash.dependencies.Input('cal-tab1', 'date')]
@@ -156,7 +165,7 @@ def update_tab1(date):
 
 
 
-# callback for tab 2
+# callback for tab 2, returns the data for the 2 dates selected in the calendar
 @app.callback(
     dash.dependencies.Output('graph-tab2', 'figure'),
     [dash.dependencies.Input('cal-tab2A', 'start_date'),
@@ -215,7 +224,7 @@ def update_tab2a(start_date, end_date):
                   }
     return figure
 
-
+# Server config, can be modified
 def run_server(self,
                port=80,
                debug=True,
@@ -223,6 +232,6 @@ def run_server(self,
                **flask_run_options):
     self.server.run(port=port, debug=debug, **flask_run_options)
 
-
+# runs application
 if __name__ == '__main__':
         app.run_server(host='tstats.digitalpacific.com.au', debug=True)
