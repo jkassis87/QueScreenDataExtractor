@@ -81,7 +81,9 @@ def get_date_range(start_date, end_date):
     end_datex = dt(int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]))
 
     while start_datex <= end_datex:
-        tdatax = gettdata(format_date(start_date))
+        date_str = str(start_datex)
+        date_str = date_str[:10]
+        tdatax = gettdata(date_str)
         tdata[0].extend(tdatax[0])
         tdata[1].extend(tdatax[1])
         tdata[2].extend(tdatax[2])
@@ -91,10 +93,20 @@ def get_date_range(start_date, end_date):
         tdata[6].extend(tdatax[6])
         tdata[7].extend(tdatax[7])
         tdata[8].extend(tdatax[8])
+        for x in tdatax:
+            print(x)
 
         start_datex += timedelta(days=1)
 
-    return(tdata)
+    tdata = tdata[1:]
+    for x in tdata:
+        print(x)
+
+    df = pd.DataFrame(tdata)
+    df = df.transpose()
+    df.columns = ['L1Total', 'L2Total', 'L3Total', 'BilTotal', 'L1Diff', 'L2Diff', 'L3Diff', 'BilDiff']
+    print(df)
+    return(df)
 
 
 app.layout = html.Div([
@@ -281,21 +293,21 @@ def update_tab3(start_date, end_date):
         tdata = get_date_range(start_date, end_date)
         figure = {
             'data': [
-                {'x': x0, 'y': tdata[1], 'type': 'line', 'name': 'Total L1',
+                {'x': x0, 'y': tdata['L1Total'], 'type': 'line', 'name': 'Total L1',
                  'legendgroup': 'Level 1', 'marker': {'color': 'rgb(0, 0, 255)'}},
-                {'x': x0, 'y': tdata[5], 'type': 'bar', 'name': 'Diff L1',
+                {'x': x0, 'y': tdata['L1Diff'], 'type': 'bar', 'name': 'Diff L1',
                  'legendgroup': 'Level 1', 'marker': {'color': 'rgb(0, 0, 255)'}},
-                {'x': x0, 'y': tdata[2], 'type': 'line', 'name': 'Total L2',
+                {'x': x0, 'y': tdata['L2Total'], 'type': 'line', 'name': 'Total L2',
                  'legendgroup': 'Level 2', 'marker': {'color': 'rgb(255, 0, 0)'}},
-                {'x': x0, 'y': tdata[6], 'type': 'bar', 'name': 'Diff L2',
+                {'x': x0, 'y': tdata['L2Diff'], 'type': 'bar', 'name': 'Diff L2',
                  'legendgroup': 'Level 2', 'marker': {'color': 'rgb(255, 0, 0'}},
-                {'x': x0, 'y': tdata[3], 'type': 'line', 'name': 'Total L3',
+                {'x': x0, 'y': tdata['L3Total'], 'type': 'line', 'name': 'Total L3',
                  'legendgroup': 'Level 3', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': x0, 'y': tdata[7], 'type': 'bar', 'name': 'Diff L3',
+                {'x': x0, 'y': tdata['L3Diff'], 'type': 'bar', 'name': 'Diff L3',
                  'legendgroup': 'Level 3', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': x0, 'y': tdata[4], 'type': 'line', 'name': 'Total Bil',
+                {'x': x0, 'y': tdata['BilTotal'], 'type': 'line', 'name': 'Total Bil',
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(51, 51, 51)'}},
-                {'x': x0, 'y': tdata[8], 'type': 'bar', 'name': 'Diff Bil',
+                {'x': x0, 'y': tdata['BilDiff'], 'type': 'bar', 'name': 'Diff Bil',
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(51, 51, 51)'}},
                       ],
             'layout': {
