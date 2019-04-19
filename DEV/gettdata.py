@@ -25,18 +25,10 @@ def realtime():
 
 # adds data to list
 for idx, val in j.items():
-    tlist.append(['L1', 'DP', realtime(), int(val['DP']['L1'])])
-    tlist.append(['L2', 'DP', realtime(), int(val['DP']['L2'])])
-    tlist.append(['L3', 'DP', realtime(), int(val['DP']['L3'])])
-    tlist.append(['Bil', 'DP', realtime(), int(val['DP']['Bil'])])
-    tlist.append(['L1', 'CR', realtime(), int(val['Crucial']['L1'])])
-    tlist.append(['L2', 'CR', realtime(), int(val['Crucial']['L2'])])
-    tlist.append(['L3', 'CR', realtime(), int(val['Crucial']['L3'])])
-    tlist.append(['Bil', 'CR', realtime(), int(val['Crucial']['Bil'])])
-    tlist.append(['L1', 'PA', realtime(), int(val['Panthur']['L1'])])
-    tlist.append(['L2', 'PA', realtime(), int(val['Panthur']['L2'])])
-    tlist.append(['L3', 'PA', realtime(), int(val['Panthur']['L3'])])
-    tlist.append(['Bil', 'PA', realtime(), int(val['Panthur']['Bil'])])
+    tlist.append(['L1', realtime(), int(val['DP']['L1']) + int(val['Crucial']['L1']) + int(val['Panthur']['L1'])])
+    tlist.append(['L2', realtime(), int(val['DP']['L2']) + int(val['Crucial']['L2']) + int(val['Panthur']['L2'])])
+    tlist.append(['L3', realtime(), int(val['DP']['L3']) + int(val['Crucial']['L3']) + int(val['Panthur']['L3'])])
+    tlist.append(['Bil', realtime(), int(val['DP']['Bil']) + int(val['Crucial']['Bil']) + int(val['Panthur']['Bil'])])
 
 # name of the sqlite database file
 sqlite_file = 'tdatadev.sqlite'
@@ -47,7 +39,7 @@ c = conn.cursor()
 
 # adds list into sqlite file
 for x in tlist:
-    c.execute('INSERT INTO AllData VALUES (?,?,?,?)', x)
+    c.execute('INSERT INTO AllData VALUES (?,?,?)', x)
 
 # saves the changes and closes the sqlite connection
 conn.commit()
