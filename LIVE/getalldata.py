@@ -52,7 +52,7 @@ while start_date <= end_date:
 
 # name of the sqlite database file
 # NOTE: This should be updated with the full directory path of the script
-sqlite_file = 'tdatadev.sqlite'
+sqlite_file = 'tdatadb.sqlite'
 
 # Connecting to the database file
 conn = sqlite3.connect(sqlite_file)
