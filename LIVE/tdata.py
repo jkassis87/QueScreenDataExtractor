@@ -10,88 +10,56 @@ from datetime import date as dtm
 import pandas as pd
 from dateutil import parser
 
-# creates datetime object for yesterday's date
 now = dt.now() - timedelta(1)
-
-# creates dash app
 app = dash.Dash(__name__)
 
-# global style settings can be added here
 colors = {
     'background': '#FFFFFF',
 }
 
-
-# authentication
-userpass = [["gae", "tano"]]
-auth = dash_auth.BasicAuth(app, userpass)
-
-# funtion for grabbing ticket data
 def gettdata(date):
-    conn = sqlite3.connect("/home/tstatsdp/public_html/live/tdatadb.sqlite")
-    tlist1 = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]]
+
     tteams = ["L1", "L2", "L3", "Bil"]
-    for y in tteams:
-        tstatadd = []
-        for x in range(len(tlist1[0])):
-            rr = "SELECT Stat FROM AllData WHERE Team = '" + y + "' AND Hour = " + str(x) + " AND Date = '" + date + "';"
-            df = pd.read_sql_query(rr, conn)
-            tlistdata = list(df["Stat"])
-            tcount = sum(tlistdata)
-            tstatadd.append(tcount)
+    ss = ':00:00'
+    stats = [
+            [date + ' 00' + ss, date + ' 01' + ss, date + ' 02' + ss, date + ' 03' + ss, date + ' 04' + ss,
+            date + ' 05' + ss, date + ' 06' + ss, date + ' 07' + ss, date + ' 08' + ss, date + ' 09' + ss,
+            date + ' 10' + ss, date + ' 11' + ss, date + ' 12' + ss, date + ' 13' + ss, date + ' 14' + ss,
+            date + ' 15' + ss, date + ' 16' + ss, date + ' 17' + ss, date + ' 18' + ss, date + ' 19' + ss,
+            date + ' 20' + ss, date + ' 21' + ss, date + ' 22' + ss, date + ' 23' + ss],
+        ]
 
-        tlist1.append(tstatadd)
-        tstatadd = []
+    for t in tteams:
+        stats_add = []
+        for x in stats[0]:
+            conn = sqlite3.connect("tdatadev.sqlite")
+            curs = conn.cursor()
+            query = "SELECT Stat FROM AllData WHERE Brand = '" + t + "' AND Date = '" + str(x) + "';"
+            curs.execute(query)
+            stat = curs.fetchone()
+            stats_add.extend(stat)
 
-    tlist1d = [[], [], [], []]
-    tlist1 = tlist1 + tlist1d
-    for thour in range(len(tlist1[0])):
+        stats.append(stats_add)
+
+    stats_add_lists = [[], [], [], []]
+    stats = stats + stats_add_lists
+    for thour in range(len(stats[0])):
         if thour == 0:
-            tlist1[5].append(0)
-            tlist1[6].append(0)
-            tlist1[7].append(0)
-            tlist1[8].append(0)
+            stats[5].append(0)
+            stats[6].append(0)
+            stats[7].append(0)
+            stats[8].append(0)
         else:
-            tlist1[5].append(tlist1[1][thour] - tlist1[1][(thour - 1)])
-            tlist1[6].append(tlist1[2][thour] - tlist1[2][(thour - 1)])
-            tlist1[7].append(tlist1[3][thour] - tlist1[3][(thour - 1)])
-            tlist1[8].append(tlist1[4][thour] - tlist1[4][(thour - 1)])
+            stats[5].append(stats[1][thour] - stats[1][(thour - 1)])
+            stats[6].append(stats[2][thour] - stats[2][(thour - 1)])
+            stats[7].append(stats[3][thour] - stats[3][(thour - 1)])
+            stats[8].append(stats[4][thour] - stats[4][(thour - 1)])
 
-    return (tlist1)
+    for x in stats:
+        print(x)
+        print(str(len(x)))
+    return (stats)
 
-
-# formats date from datetime object to string, used for calendar callbacks
-def format_date(datest):
-    thedate = dt.strptime(datest, '%Y-%m-%d')
-    date_string = str(thedate)
-    date_string = re.sub(' 00:00:00', '', date_string)
-    return(date_string)
-
-# function got getting a date range
-# INCOMPLETE / Not Used Currently 
-def get_date_range(start_date, end_date):
-    tdata = [[], [], [], [], [], [], [], [], []]
-
-    start_datex = dt(int(start_date[0:4]), int(start_date[5:7]), int(start_date[8:10]))
-    end_datex = dt(int(end_date[0:4]), int(end_date[5:7]), int(end_date[8:10]))
-
-    while start_datex <= end_datex:
-        tdatax = gettdata(format_date(start_date))
-        tdata[0].extend(tdatax[0])
-        tdata[1].extend(tdatax[1])
-        tdata[2].extend(tdatax[2])
-        tdata[3].extend(tdatax[3])
-        tdata[4].extend(tdatax[4])
-        tdata[5].extend(tdatax[5])
-        tdata[6].extend(tdatax[6])
-        tdata[7].extend(tdatax[7])
-        tdata[8].extend(tdatax[8])
-
-        start_datex += timedelta(days=1)
-
-    return(tdata)
-
-# Creates the main app, adds tabs, basic labels, and calendars
 app.layout = html.Div([
     dcc.Tabs(id="tabs", children=[
         dcc.Tab(label='Single Day', children=[
@@ -125,7 +93,7 @@ app.layout = html.Div([
 
 
 
-# callback for tab 1, returns the data for the dates selected in the calendar
+# callback for tab 1
 @app.callback(
     dash.dependencies.Output('graph-tab1', 'figure'),
     [dash.dependencies.Input('cal-tab1', 'date')]
@@ -133,28 +101,29 @@ app.layout = html.Div([
 def update_tab1(date):
 
     if date is not None:
-        tdata = gettdata(format_date(date))
+        tdata = gettdata(date)
+        hr_list = list(range(0, 25))
         figure = {
             'data': [
-                      {'x': tdata[0], 'y': tdata[1], 'type': 'line', 'name': 'Total L1',
+                      {'x': hr_list, 'y': tdata[1], 'type': 'line', 'name': 'Total L1',
                        'legendgroup': 'Level 1', 'marker': {'color': 'rgb(0, 0, 255)'}},
-                {'x': tdata[0], 'y': tdata[5], 'type': 'bar', 'name': 'Diff L1',
+                {'x': hr_list, 'y': tdata[5], 'type': 'bar', 'name': 'Diff L1',
                  'legendgroup': 'Level 1', 'marker': {'color': 'rgb(0, 0, 255)'}},
-                {'x': tdata[0], 'y': tdata[2], 'type': 'line', 'name': 'Total L2',
+                {'x': hr_list, 'y': tdata[2], 'type': 'line', 'name': 'Total L2',
                  'legendgroup': 'Level 2', 'marker': {'color': 'rgb(255, 0, 0)'}},
-                {'x': tdata[0], 'y': tdata[6], 'type': 'bar', 'name': 'Diff L2',
+                {'x': hr_list, 'y': tdata[6], 'type': 'bar', 'name': 'Diff L2',
                  'legendgroup': 'Level 2', 'marker': {'color': 'rgb(255, 0, 0'}},
-                {'x': tdata[0], 'y': tdata[3], 'type': 'line', 'name': 'Total L3',
+                {'x': hr_list, 'y': tdata[3], 'type': 'line', 'name': 'Total L3',
                  'legendgroup': 'Level 3', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': tdata[0], 'y': tdata[7], 'type': 'bar', 'name': 'Diff L3',
+                {'x': hr_list, 'y': tdata[7], 'type': 'bar', 'name': 'Diff L3',
                  'legendgroup': 'Level 3', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': tdata[0], 'y': tdata[4], 'type': 'line', 'name': 'Total Bil',
+                {'x': hr_list, 'y': tdata[4], 'type': 'line', 'name': 'Total Bil',
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(51, 51, 51)'}},
-                {'x': tdata[0], 'y': tdata[8], 'type': 'bar', 'name': 'Diff Bil',
+                {'x': hr_list, 'y': tdata[8], 'type': 'bar', 'name': 'Diff Bil',
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(51, 51, 51)'}},
             ],
             'layout': {
-                      'title': 'Ticket Stats For ' + parser.parse(date).strftime("%A") + ' ' + format_date(date),
+                      'title': 'Ticket Stats For ' + parser.parse(date).strftime("%A") + ' ' + date,
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
@@ -165,7 +134,7 @@ def update_tab1(date):
 
 
 
-# callback for tab 2, returns the data for the 2 dates selected in the calendar
+# callback for tab 2
 @app.callback(
     dash.dependencies.Output('graph-tab2', 'figure'),
     [dash.dependencies.Input('cal-tab2A', 'start_date'),
@@ -175,46 +144,47 @@ def update_tab1(date):
 def update_tab2a(start_date, end_date):
 
     if start_date is not None and end_date is not None:
-        tdata_start = gettdata(format_date(start_date))
-        tdata_end = gettdata(format_date(end_date))
+        tdata_start = gettdata(start_date)
+        tdata_end = gettdata(end_date)
+        hr_list = list(range(0, 25))
         figure = {
             'data': [
-                      {'x': tdata_start[0], 'y': tdata_start[1], 'type': 'line', 'name': 'Total L1 - A',
+                      {'x': hr_list, 'y': tdata_start[1], 'type': 'line', 'name': 'Total L1 - A',
                        'legendgroup': 'Level 1', 'marker': {'color': 'rgb(0, 0, 255)'}},
-                {'x': tdata_start[0], 'y': tdata_start[5], 'type': 'bar', 'name': 'Diff L1 - A',
+                {'x': hr_list, 'y': tdata_start[5], 'type': 'bar', 'name': 'Diff L1 - A',
                  'legendgroup': 'Level 1', 'marker': {'color': 'rgb(0, 0, 255)'}},
-                {'x': tdata_end[0], 'y': tdata_end[1], 'type': 'line', 'name': 'Total L1 - B',
+                {'x': hr_list, 'y': tdata_end[1], 'type': 'line', 'name': 'Total L1 - B',
                  'legendgroup': 'Level 1', 'marker': {'color': 'rgb(255, 123, 0)'}},
-                {'x': tdata_end[0], 'y': tdata_end[5], 'type': 'bar', 'name': 'Diff L1 - B',
+                {'x': hr_list, 'y': tdata_end[5], 'type': 'bar', 'name': 'Diff L1 - B',
                  'legendgroup': 'Level 1', 'marker': {'color': 'rgb(255, 123, 0)'}},
-                {'x': tdata_start[0], 'y': tdata_start[2], 'type': 'line', 'name': 'Total L2 - A',
+                {'x': hr_list, 'y': tdata_start[2], 'type': 'line', 'name': 'Total L2 - A',
                  'legendgroup': 'Level 2', 'marker': {'color': 'rgb(255, 0, 0)'}},
-                {'x': tdata_start[0], 'y': tdata_start[6], 'type': 'bar', 'name': 'Diff L2 - A',
+                {'x': hr_list, 'y': tdata_start[6], 'type': 'bar', 'name': 'Diff L2 - A',
                  'legendgroup': 'Level 2', 'marker': {'color': 'rgb(255, 0, 0)'}},
-                {'x': tdata_end[0], 'y': tdata_end[2], 'type': 'line', 'name': 'Total L2 - B',
+                {'x': hr_list, 'y': tdata_end[2], 'type': 'line', 'name': 'Total L2 - B',
                  'legendgroup': 'Level 2', 'marker': {'color': 'rgb(0, 255, 255)'}},
-                {'x': tdata_end[0], 'y': tdata_end[6], 'type': 'bar', 'name': 'Diff L2 - B',
+                {'x': hr_list, 'y': tdata_end[6], 'type': 'bar', 'name': 'Diff L2 - B',
                  'legendgroup': 'Level 2', 'marker': {'color': 'rgb(0, 255, 255)'}},
-                {'x': tdata_start[0], 'y': tdata_start[3], 'type': 'line', 'name': 'Total L3 - A',
+                {'x': hr_list, 'y': tdata_start[3], 'type': 'line', 'name': 'Total L3 - A',
                  'legendgroup': 'Level 3', 'marker': {'color': 'rgb(0, 0, 0)'}},
-                {'x': tdata_start[0], 'y': tdata_start[7], 'type': 'bar', 'name': 'Diff L3 - A',
+                {'x': hr_list, 'y': tdata_start[7], 'type': 'bar', 'name': 'Diff L3 - A',
                  'legendgroup': 'Level 3', 'marker': {'color': 'rgb(0, 0, 0)'}},
-                {'x': tdata_end[0], 'y': tdata_end[3], 'type': 'line', 'name': 'Total L3 - B',
+                {'x': hr_list, 'y': tdata_end[3], 'type': 'line', 'name': 'Total L3 - B',
                  'legendgroup': 'Level 3', 'marker': {'color': 'rgba(120, 120, 120)'}},
-                {'x': tdata_end[0], 'y': tdata_end[7], 'type': 'bar', 'name': 'Diff L3 - B',
+                {'x': hr_list, 'y': tdata_end[7], 'type': 'bar', 'name': 'Diff L3 - B',
                  'legendgroup': 'Level 3', 'marker': {'color': 'rgb(120, 120, 120)'}},
-                {'x': tdata_start[0], 'y': tdata_start[4], 'type': 'line', 'name': 'Total Bil - A',
+                {'x': hr_list, 'y': tdata_start[4], 'type': 'line', 'name': 'Total Bil - A',
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': tdata_start[0], 'y': tdata_start[8], 'type': 'bar', 'name': 'Diff Bil - A',
+                {'x': hr_list, 'y': tdata_start[8], 'type': 'bar', 'name': 'Diff Bil - A',
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(0, 255, 0)'}},
-                {'x': tdata_end[0], 'y': tdata_end[4], 'type': 'line', 'name': 'Total Bil - B',
+                {'x': hr_list, 'y': tdata_end[4], 'type': 'line', 'name': 'Total Bil - B',
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(255, 0, 255)'}},
-                {'x': tdata_end[0], 'y': tdata_end[8], 'type': 'bar', 'name': 'Diff Bil - B',
+                {'x': hr_list, 'y': tdata_end[8], 'type': 'bar', 'name': 'Diff Bil - B',
                  'legendgroup': 'Billing', 'marker': {'color': 'rgb(255, 0, 255)'}},
             ],
             'layout': {
                       'title': 'Ticket Stats for A - ' + parser.parse(start_date).strftime("%A") + ' '
-                               + format_date(start_date) + ' and B - ' + parser.parse(end_date).strftime("%A") + ' ' + format_date(end_date),
+                               + start_date + ' and B - ' + parser.parse(end_date).strftime("%A") + ' ' + end_date,
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'linear', 'dtick': 1},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
@@ -224,7 +194,7 @@ def update_tab2a(start_date, end_date):
                   }
     return figure
 
-# Server config, can be modified
+
 def run_server(self,
                port=80,
                debug=True,
@@ -232,6 +202,6 @@ def run_server(self,
                **flask_run_options):
     self.server.run(port=port, debug=debug, **flask_run_options)
 
-# runs application
+
 if __name__ == '__main__':
         app.run_server(host='tstats.digitalpacific.com.au', debug=True)
