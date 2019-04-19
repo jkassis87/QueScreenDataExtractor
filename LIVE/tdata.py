@@ -32,7 +32,7 @@ def gettdata(date):
     for t in tteams:
         stats_add = []
         for x in stats[0]:
-            conn = sqlite3.connect("tdatadev.sqlite")
+            conn = sqlite3.connect("tdatadb.sqlite")
             curs = conn.cursor()
             query = "SELECT Stat FROM AllData WHERE Brand = '" + t + "' AND Date = '" + str(x) + "';"
             curs.execute(query)
