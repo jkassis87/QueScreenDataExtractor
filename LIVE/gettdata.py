@@ -1,4 +1,4 @@
-import sqlite3, json, requests, csv
+import sqlite3, json, requests, time
 from datetime import datetime, timedelta, date
 
 # gets timestamps to use
@@ -12,6 +12,11 @@ rpass = '5rsMThTeZ22p3MqGpz2xRPGY5hAWrwmx'
 urltoget = (r'http://pbx02.apdcsy1.digitalpacific.com.au/tickethistory_api.php?date=' + yesterday)
 getticketdata = requests.get(urltoget, auth=(ruser, rpass))
 j = json.loads(getticketdata.text)
+
+# converts unix time to yyyy-mm-dd hh:mm:ss string
+def realtime():
+    timedatestring = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(idx))))
+    return(timedatestring)
 
 # creates initial lists
 tlist = []
