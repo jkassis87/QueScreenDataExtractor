@@ -34,14 +34,14 @@ def gettdata(date):
             query = "SELECT Stat FROM AllData WHERE Brand = ? AND Date = ?;"
             curs.execute(query, (t,x))
             y = curs.fetchone()
-            print(y)
+            #print(y)
             stats_add.extend(y)
 
         stats.append(stats_add)
 
-    for x in stats:
-        print(x)
-        print(str(len(x)))
+    #for x in stats:
+    #    print(x)
+    #    print(str(len(x)))
     return (stats)
 
 
@@ -187,13 +187,14 @@ def update_tab2(start_date, end_date):
 def update_tab3(start_date, end_date):
 
     if start_date is not None and end_date is not None:
-        tdata = [[], [], [], [], []]
         start_dt = dt.strptime(start_date, '%Y-%m-%d')
         end_dt = dt.strptime(end_date, '%Y-%m-%d')
+        tdata = gettdata(start_date)
         while start_dt <= end_dt:
-            x = gettdata(str(start_dt)[:-9])
-            tdata.append(x)
             start_dt += timedelta(days=1)
+            date_string = start_dt.strftime('%Y-%m-%d')
+            print(date_string)
+            gettdata(start_dt.strftime('%Y-%m-%d'))
 
         # data for Tab 3
         figure = {
