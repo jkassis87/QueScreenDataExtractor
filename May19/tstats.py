@@ -31,8 +31,8 @@ def gettdata(date):
         for x in stats[0]:
             conn = sqlite3.connect("tdatadb.sqlite")
             curs = conn.cursor()
-            query = "SELECT Stat FROM AllData WHERE Brand = '" + t + "' AND Date = '" + x + "';"
-            curs.execute(query)
+            query = "SELECT Stat FROM AllData WHERE Brand = ? AND Date = ?;"
+            curs.execute(query, (t,x))
             y = curs.fetchone()
             print(y)
             stats_add.extend(y)
@@ -206,7 +206,7 @@ def update_tab3(start_date, end_date):
 
             # Layout for tab 3
             'layout': {
-                      'title': 'Ticket Stats For ' + parser.parse(date).strftime("%A") + ' ' + date,
+                      'title': 'Ticket Stats For ' + parser.parse(start_date).strftime("%A") + ' ' + start_date,
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'array', 'dtick': 1, 'tickformat': '%H'},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
