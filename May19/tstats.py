@@ -110,7 +110,8 @@ def update_tab1(date):
 
     if date is not None:
         tdata = gettdata(date)
-
+        for x in tdata:
+            print(x)
         # data for Tab 1
         figure = {
             'data': [
@@ -187,15 +188,22 @@ def update_tab2(start_date, end_date):
 def update_tab3(start_date, end_date):
 
     if start_date is not None and end_date is not None:
+
+        # start_date and end_date as a datetime function
         start_dt = dt.strptime(start_date, '%Y-%m-%d')
         end_dt = dt.strptime(end_date, '%Y-%m-%d')
+
+        # gets data of first date
         tdata = gettdata(start_date)
+
         while start_dt <= end_dt:
             start_dt += timedelta(days=1)
             date_string = start_dt.strftime('%Y-%m-%d')
-            print(date_string)
-            gettdata(start_dt.strftime('%Y-%m-%d'))
-
+            date_data = gettdata(date_string)
+            for a, b in zip(tdata, date_data):
+                a.extend(b)
+        for x in tdata:
+            print(x)
         # data for Tab 3
         figure = {
             'data': [
