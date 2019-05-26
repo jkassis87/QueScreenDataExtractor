@@ -217,7 +217,8 @@ def update_tab3(start_date, end_date):
 
             # Layout for tab 3
             'layout': {
-                      'title': 'Ticket Stats For ' + parser.parse(start_date).strftime("%A") + ' ' + start_date,
+                      'title': 'Ticket Stats For Date Range ' + parser.parse(start_date).strftime("%A") + ' ' + start_date + ' to '
+                        + parser.parse(end_date).strftime("%A") + ' ' + end_date,
                       'plot_bgcolor': colors['background'],
                 'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'array', 'dtick': 1, 'tickformat': '%Y-%m-%d %H'},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
