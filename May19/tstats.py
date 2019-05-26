@@ -56,7 +56,9 @@ app.layout = html.Div([
                     min_date_allowed=dt(2019, 1, 15),
                     max_date_allowed=dt(now.year, now.month, now.day),
                     initial_visible_month=dt(now.year, now.month, now.day),
-                    date=dt(now.year, now.month, now.day)),
+                    date=dt(now.year, now.month, now.day),
+                    display_format='MMMM Y, DD'
+                ),
                 dcc.Graph(
                     id='graph-tab1',
                 )
@@ -196,7 +198,7 @@ def update_tab3(start_date, end_date):
         # gets data of first date
         tdata = gettdata(start_date)
 
-        while start_dt <= end_dt:
+        while start_dt < end_dt:
             start_dt += timedelta(days=1)
             date_string = start_dt.strftime('%Y-%m-%d')
             date_data = gettdata(date_string)
