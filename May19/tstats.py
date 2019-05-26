@@ -1,5 +1,3 @@
-#!/home/tstatsdp/public_html/live/bin/python3
-
 import dash, re, csv, sqlite3
 import dash_core_components as dcc
 import dash_html_components as html
@@ -35,7 +33,8 @@ def gettdata(date):
             curs = conn.cursor()
             query = "SELECT Stat FROM AllData WHERE Brand = '" + t + "' AND Date = '" + x + "';"
             curs.execute(query)
-            stats_add.extend(curs.fetchone())
+            y = curs.fetchone()
+            stats_add.extend(y)
 
         stats.append(stats_add)
 
@@ -218,4 +217,4 @@ def update_tab3(start_date, end_date):
 
 
 if __name__ == '__main__':
-        app.run_server(debug=True)
+    app.run_server(debug=True)
