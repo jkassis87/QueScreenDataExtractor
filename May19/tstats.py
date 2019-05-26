@@ -34,6 +34,7 @@ def gettdata(date):
             query = "SELECT Stat FROM AllData WHERE Brand = '" + t + "' AND Date = '" + x + "';"
             curs.execute(query)
             y = curs.fetchone()
+            print(y)
             stats_add.extend(y)
 
         stats.append(stats_add)
