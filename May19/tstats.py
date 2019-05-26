@@ -217,7 +217,7 @@ def update_tab3(start_date, end_date):
             'layout': {
                       'title': 'Ticket Stats For ' + parser.parse(start_date).strftime("%A") + ' ' + start_date,
                       'plot_bgcolor': colors['background'],
-                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'array', 'dtick': 1, 'tickformat': '%H'},
+                'xaxis': {'title': 'Hour Of The Day', 'tickmode': 'array', 'dtick': 1, 'tickformat': '%Y-%m-%d %H'},
                 'yaxis': {'title': 'Ticket Count', 'tickmode': 'linear', 'dtick': 10},
                 'legend': {'orientation': 'h', 'x': 0, 'y': -0.2, 'yanchor': 'top'}
                       }
