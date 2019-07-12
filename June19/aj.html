@@ -25,18 +25,25 @@ var url = "data.php?brand=CR&date=2019-05-19%"
  });
 */
 
+window.tc = []
+window.tt = []
+
 $.getJSON(url, function (json) {
 
     for (var i = 0; i < json.length; i++) {
 
         //console.log(json[i].Stat);
         //console.log(json[i].Tstamp);
-        var tcount = json[i].Stat;
-        var ttime = json[i].Tstamp;
-        console.log("count " + tcount);
-        console.log("time " + ttime);
+        window.tc.push(parseInt(json[i].Stat));
+        window.tt.push(json[i].Tstamp);
+        
+       
     }
 });
+
+ 
+ console.log(window.tt);
+ console.log(window.tc);
 
 </script>
 
@@ -44,9 +51,6 @@ $.getJSON(url, function (json) {
 
 <body>
 
-<button id="getStats">Get Stats</button>
-<div id="cand"></div>
 
 
 </body>
-</html>
