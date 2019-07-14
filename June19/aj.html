@@ -4,53 +4,43 @@
 <title>Team Statistics</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 </head>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-<script>
-
-
-
-var url = "data.php?brand=CR&date=2019-05-19%"
-
-/*$.ajax({
-            type: "GET", //rest Type
-            dataType: 'json', //mispelled
-            url: "data.php?brand=CR&date=2019-05-19%",
-            contentType: "application/json; charset=utf-8",
-            success: function (msg) {
-                console.log(msg);                
-            }
- });
-*/
-
-window.tc = []
-window.tt = []
-
-$.getJSON(url, function (json) {
-
-    for (var i = 0; i < json.length; i++) {
-
-        //console.log(json[i].Stat);
-        //console.log(json[i].Tstamp);
-        window.tc.push(parseInt(json[i].Stat));
-        window.tt.push(json[i].Tstamp);
-        
-       
-    }
-});
-
- 
- console.log(window.tt);
- console.log(window.tc);
-
-</script>
-
 </head>
 
 <body>
+    <div id="graph"></graph>
+    <script>
+        var url = "data.php?brand=CR&date=2019-05-19%"
+        
+        window.trace1 = {
+        x: [],
+        y: [],
+        type: 'scatter'
+        };
+        
+        $.getJSON(url, function (json) {
+            for (var i = 0; i < json.length; i++) {
+                
+                //window.trace1.x[i] += json[i].Stat;
+                //window.trace1.y[i] += json[i].Tstamp;
+                window.trace1.x.push(parseInt(json[i].Stat));
+                window.trace1.y.push(json[i].Tstamp);
+               
+            }
+        });
 
 
+        console.log(window.trace1);
 
+        var data = [window.trace1];
+        var graph = document.getElementById('graph');
+        Plotly.newPlot(graph, window.trace1);
+        
+        </script>
+
+        
+    
+    
+    
 </body>
