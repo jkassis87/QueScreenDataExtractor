@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div id="graph"></graph>
+    <div id="graph"></div>
     <script>
         var url = "data.php?brand=CR&date=2019-05-19%"
         
@@ -19,25 +19,37 @@
         mode: 'lines'
         };
         var url = "data.php?brand=CR&date=2019-05-19%"
-        $.getJSON(url, function (json) {
-            for (var i = 0; i < json.length; i++) {
+        // $.getJSON(url, function (json) {
+        //     for (var i = 0; i < json.length; i++) {
                 
-                //window.trace1.x[i] += json[i].Stat;
-                //window.trace1.y[i] += json[i].Tstamp;
-                window.trace1.x.push(parseInt(json[i].Stat));
-                window.trace1.y.push(json[i].Stat);
+        //         //window.trace1.x[i] += json[i].Stat;
+        //         //window.trace1.y[i] += json[i].Tstamp;
+        //         window.trace1.x.push(parseInt(json[i].Stat));
+        //         window.trace1.y.push(json[i].Stat);
                
+        //     }
+        // },
+        // success: function (data) {
+        //     console.log('yay');
+        // });
+        $.ajax({
+            dataType: 'json',
+            url: url,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                
+                    //window.trace1.x[i] += json[i].Stat;
+                    //window.trace1.y[i] += json[i].Tstamp;
+                    window.trace1.y.push(parseInt(data[i].Stat));
+                    window.trace1.x.push(data[i].Tstamp);  
+                }
+                var graph = document.getElementById('graph');
+                Plotly.newPlot(graph, [window.trace1]);
             }
         });
-
-
         console.log(window.trace1);
-        var graph = document.getElementById('graph');
-        Plotly.newPlot(graph, [window.trace1]);
         
         </script>
 
     
 </body>
-
-
