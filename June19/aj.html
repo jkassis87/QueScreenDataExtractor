@@ -4,42 +4,38 @@
 <title>Team Statistics</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 </head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+$( function() {
+            $( "#datepicker" ).datepicker();
+            $( "#datepicker" ).datepicker("show");
+        } );
+</script>
 </head>
 
 <body>
     <div id="graph"></div>
+    <p>Date: <input type="text" id="datepicker"></p>
     <script>
-        var url = "data.php?brand=CR&date=2019-05-19%"
+
         
+
         window.trace1 = {
         x: [],
         y: [],
         mode: 'lines'
         };
         var url = "data.php?brand=CR&date=2019-05-19%"
-        // $.getJSON(url, function (json) {
-        //     for (var i = 0; i < json.length; i++) {
-                
-        //         //window.trace1.x[i] += json[i].Stat;
-        //         //window.trace1.y[i] += json[i].Tstamp;
-        //         window.trace1.x.push(parseInt(json[i].Stat));
-        //         window.trace1.y.push(json[i].Stat);
-               
-        //     }
-        // },
-        // success: function (data) {
-        //     console.log('yay');
-        // });
+   
         $.ajax({
             dataType: 'json',
             url: url,
             success: function (data) {
                 for (var i = 0; i < data.length; i++) {
-                
-                    //window.trace1.x[i] += json[i].Stat;
-                    //window.trace1.y[i] += json[i].Tstamp;
+
                     window.trace1.y.push(parseInt(data[i].Stat));
                     window.trace1.x.push(data[i].Tstamp);  
                 }
@@ -47,6 +43,7 @@
                 Plotly.newPlot(graph, [window.trace1]);
             }
         });
+
         console.log(window.trace1);
         
         </script>
