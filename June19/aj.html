@@ -32,7 +32,10 @@
         y: [],
         mode: 'lines'
         };
-        var url = "data.php?brand=CR&date=2019-05-19%"
+
+        var brand = 'PA'
+        var date = '2019-05-19'
+        var url = 'data.php?brand=' + brand + '&date=' + date + '%'
    
         $.ajax({
             dataType: 'json',
