@@ -17,12 +17,22 @@
             
             } );
 </script>
+<script>
+    $(document).ready(function(){
+
+        $(document).on("click", "#butta", function(event, ui){
+        alert("The paragraph was clicked.");
+
+      });
+    });
+</script>
 </head>
 
 <body>
     <div id="graph"></div>
     <p>Date: <input type="text" id="datepicker"></p>
     <input type="text" id="sendDate" readonly>
+    <button type="button" id="butta">Test Button</button>
 
 
     <script>
