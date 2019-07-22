@@ -9,19 +9,23 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-$( function() {
-            $( "#datepicker" ).datepicker();
-            $( "#datepicker" ).datepicker("show");
-        } );
+    $( function() {
+            $( "#datepicker" ).datepicker({
+                dateFormat: "yy-mm-dd",
+                altField: '#sendDate'
+            });
+            
+            } );
 </script>
 </head>
 
 <body>
     <div id="graph"></div>
     <p>Date: <input type="text" id="datepicker"></p>
-    <script>
+    <input type="text" id="sendDate" readonly>
 
-        
+
+    <script>
 
         window.trace1 = {
         x: [],
@@ -46,7 +50,7 @@ $( function() {
 
         console.log(window.trace1);
         
-        </script>
+    </script>
 
     
 </body>
