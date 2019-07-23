@@ -8,20 +8,53 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script>
-    $( function() {
-            $( "#datepicker" ).datepicker({
-                dateFormat: "yy-mm-dd",
-                altField: '#sendDate'
-            });
-            
-            } );
-</script>
-<script>
-    $(document).ready(function(){
 
+<script>
+    
+    // datepicker element
+    $(document).ready(function(){
+        $( "#datepicker" ).datepicker({
+                dateFormat: "yy-mm-dd", 
+            });
+        
+        // action to update graphe when date is clicked
         $(document).on("click", "#butta", function(event, ui){
-        alert("The paragraph was clicked.");
+
+            // create template for data to graph
+            window.trace1 = {
+            x: [],
+            y: [],
+            mode: 'lines'
+            };
+
+            // elements for get request
+            var brand = 'PA'
+            var tdate = $("#datepicker").datepicker("getDate")
+            var tdatea = $.datepicker.formatDate("yy-mm-dd", tdate)
+            var url = 'data.php?brand=' + brand + '&date=' + tdatea + '%'
+   
+            // get request to grab data from db
+            $.ajax({
+                dataType: 'json',
+                url: url,
+
+                // push data into var window.trace1 
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+
+                        window.trace1.y.push(parseInt(data[i].Stat));
+                        window.trace1.x.push(data[i].Tstamp);  
+
+                        }
+                    
+                    // assign var to the graph div
+                    var graph = document.getElementById('graph');
+                    
+                    // display graph
+                    Plotly.newPlot(graph, [window.trace1]);
+
+                    }
+                });
 
       });
     });
@@ -29,41 +62,10 @@
 </head>
 
 <body>
+
     <div id="graph"></div>
     <p>Date: <input type="text" id="datepicker"></p>
-    <input type="text" id="sendDate" readonly>
-    <button type="button" id="butta">Test Button</button>
-
-
-    <script>
-
-        window.trace1 = {
-        x: [],
-        y: [],
-        mode: 'lines'
-        };
-
-        var brand = 'PA'
-        var date = '2019-05-19'
-        var url = 'data.php?brand=' + brand + '&date=' + date + '%'
-   
-        $.ajax({
-            dataType: 'json',
-            url: url,
-            success: function (data) {
-                for (var i = 0; i < data.length; i++) {
-
-                    window.trace1.y.push(parseInt(data[i].Stat));
-                    window.trace1.x.push(data[i].Tstamp);  
-                }
-                var graph = document.getElementById('graph');
-                Plotly.newPlot(graph, [window.trace1]);
-            }
-        });
-
-        console.log(window.trace1);
-        
-    </script>
+    <button type="button" id="butta">Update Graph</button>
 
     
 </body>
