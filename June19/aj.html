@@ -28,7 +28,8 @@
             };
 
             // elements for get request
-            var brand = 'PA'
+            var brand = $('#brandSelect :selected').text()
+            console.log(brand)
             var tdate = $("#datepicker").datepicker("getDate")
             var tdatea = $.datepicker.formatDate("yy-mm-dd", tdate)
             var url = 'data.php?brand=' + brand + '&date=' + tdatea + '%'
@@ -64,7 +65,15 @@
 <body>
 
     <div id="graph"></div>
+
     <p>Date: <input type="text" id="datepicker"></p>
+
+    <p>Brand: <select id="brandSelect">
+            <option value="1">DP</option>
+            <option value="2">CR</option>
+            <option value="2">PA</option>
+            </select>
+        </p>
     <button type="button" id="butta">Update Graph</button>
 
     
