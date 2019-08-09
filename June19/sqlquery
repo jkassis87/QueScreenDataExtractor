@@ -1,0 +1,1 @@
+SELECT Tstamp, SUM(Stat) FROM alldata WHERE Date(Tstamp) = '2019-01-15' GROUP BY Tstamp ORDER BY Tstamp ASC 
