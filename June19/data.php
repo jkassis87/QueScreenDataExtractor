@@ -1,52 +1,62 @@
-<!doctype html>
-<html lang="en">
-<head>
-<title>Team Statistics</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-</head>
+<?php
+/**
+ * filename: data.php
+ * description: this will return the requested stats
+ */
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+//setting header to json
+header('Content-Type: application/json');
 
-<script>
+//database
+define('DB_HOST', '127.0.0.1');
+define('DB_USERNAME', 'larauser');
+define('DB_PASSWORD', 'password');
+define('DB_NAME', 'charta');
 
+//get connection
+$mysqli = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+if(!$mysqli){
+	die("Connection failed: " . $mysqli->error);
+}
 
+// set the _GET values
+$brand = $_GET["brand"];
+$tstamp = $_GET["date"];
 
-var url = "data.php?brand=CR&date=2019-05-19%"
+if ($brand == 'ALL') {
 
-/*$.ajax({
-            type: "GET", //rest Type
-            dataType: 'json', //mispelled
-            url: "data.php?brand=CR&date=2019-05-19%",
-            contentType: "application/json; charset=utf-8",
-            success: function (msg) {
-                console.log(msg);                
-            }
- });
-*/
+	$query = "SELECT Tstamp, SUM(Stat) FROM alldata WHERE Date(Tstamp) = '$tstamp' GROUP BY Tstamp ORDER BY Tstamp ASC"; 
+	$result = $mysqli->query($query);
+	$data = array();
+	foreach ($result as $row) { $data[] = $row; }
 
-$.getJSON(url, function (json) {
+} else {
+	
+	$query = "SELECT Stat, Tstamp FROM alldata WHERE Brand = '$brand' AND DATE(Tstamp) = '$tstamp' ORDER BY Tstamp ASC";
+	$result = $mysqli->query($query);
+	$data = array();
+	foreach ($result as $row) { $data[] = $row; } 
 
-    for (var i = 0; i < json.length; i++) {
+}
 
-        //console.log(json[i].Stat);
-        //console.log(json[i].Tstamp);
-        var tcount = json[i].Stat;
-        var ttime = json[i].Tstamp;
-        console.log("count " + tcount);
-        console.log("time " + ttime);
-    }
-});
+if ($brand == 'ALL') {
+	
+	$newArr = array_map(function($data) {
+		return array(
+			'Stat' => $data['SUM(Stat)'],
+			'Tstamp' => $data['Tstamp']
+		);
+	}, $data);
 
-</script>
+	echo json_encode($newArr);
 
-</head>
+} else {
 
-<body>
+	echo json_encode($data);
 
-<button id="getStats">Get Stats</button>
-<div id="cand"></div>
+}
 
-
-</body>
-</html>
+//now print the data
+//echo json_encode($data);
+//echo json_encode($newArr);
+//var_dump($data);
