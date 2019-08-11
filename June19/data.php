@@ -25,7 +25,7 @@ $tstamp = $_GET["date"];
 
 if ($brand == 'ALL') {
 
-	$query = "SELECT Tstamp, SUM(Stat) FROM alldata WHERE Date(Tstamp) = '$tstamp' GROUP BY Tstamp ORDER BY Tstamp ASC"; 
+	$query = "SELECT Tstamp, SUM(Stat) as 'Stat' FROM alldata WHERE Date(Tstamp) = '$tstamp' GROUP BY Tstamp ORDER BY Tstamp ASC"; 
 	$result = $mysqli->query($query);
 	$data = array();
 	foreach ($result as $row) { $data[] = $row; }
@@ -39,24 +39,4 @@ if ($brand == 'ALL') {
 
 }
 
-if ($brand == 'ALL') {
-	
-	$newArr = array_map(function($data) {
-		return array(
-			'Stat' => $data['SUM(Stat)'],
-			'Tstamp' => $data['Tstamp']
-		);
-	}, $data);
-
-	echo json_encode($newArr);
-
-} else {
-
-	echo json_encode($data);
-
-}
-
-//now print the data
-//echo json_encode($data);
-//echo json_encode($newArr);
-//var_dump($data);
+echo json_encode($data);
