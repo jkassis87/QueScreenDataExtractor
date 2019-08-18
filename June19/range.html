@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Team Statistics</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+</head>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="js/jquery.comiseo.daterangepicker.css" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script src="js/jquery.comiseo.daterangepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+
+<script>
+    
+        // datepicker element
+        $(document).ready(function(){
+            $( "#datepicker1" ).datepicker({
+                    dateFormat: "yy-mm-dd", 
+                });
+            
+            // action to update graphe when date is clicked
+            $(document).on("click", "#butta", function(event, ui){
+    
+                // create template for data to graph
+                window.trace1 = {
+                x: [],
+                y: [],
+                mode: 'lines'
+                };
+    
+                window.trace2 = {
+                x: [],
+                y: [],
+                mode: 'lines'
+                };
+    
+                // elements for get request
+                var brand1 = $('#brandSelect1 :selected').text()
+                console.log(brand1)
+                var tdate = $("#datepicker1").datepicker("getDate")
+                var tdate1 = $.datepicker.formatDate("yy-mm-dd", tdate)
+                var url1 = 'data.php?brand=' + brand1 + '&date=' + tdate1
+       
+                // get request to grab data from db
+                $.ajax({
+                    dataType: 'json',
+                    url: url1,
+    
+                    // push data into var window.trace1 
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+    
+                            window.trace1.y.push(parseInt(data[i].Stat));
+                            window.trace1.x.push(data[i].Tstamp);  
+    
+                            }
+                        
+                        // assign var to the graph div
+                        var graph = document.getElementById('graph');
+                        
+                        // display graph
+                        Plotly.newPlot(graph, [window.trace1]);
+    
+                        }
+                    });
+    
+          });
+        });
+    </script>
+
+<script>
+    $(document).ready(function(){
+        $( "#e5" ).daterangepicker({
+            datepickerOptions : {
+                numberOfMonths: 2,
+                dateFormat: 'yy-mm-dd',
+            }
+        });
+        $( "#e5_get" ).click(function () {
+        
+        var sdate = JSON.stringify($("#e5").daterangepicker("getRange").start);
+        var sdate = sdate.substring(0, sdate.indexOf('T'));
+        var sdate = sdate.substring(1, sdate.length);
+        var edate = JSON.stringify($("#e5").daterangepicker("getRange").end);
+        var edate = edate.substring(0, edate.indexOf('T'));
+        var edate = edate.substring(1, edate.length);
+
+        window.alert(sdate + edate);
+
+        })
+    });
+</script>
+
+
+</head>
+    
+<body>
+
+    <!-- graph is displayed in this div -->
+    <div id="graph"></div>
+
+    <!-- datepicker -->
+    <p>Date: <input type="text" id="datepicker1"></p>
+
+    <!-- Dropdown to select brand -->
+    <p>Brand: <select id="brandSelect1">
+            <option value="1">ALL</option>
+            <option value="1">DP</option>
+            <option value="2">CR</option>
+            <option value="2">PA</option>
+            </select>
+        </p>
+
+    <!-- graph updates when button is pressed -->
+    <p><button type="button" id="butta">Update Graph</button></p>
+
+
+    <p><input type="text" id="e5"></p>
+    <p><button type="button" id="e5_get">Update Button</button></p>
+
+
+    
+</body>
