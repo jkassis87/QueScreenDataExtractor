@@ -75,6 +75,7 @@
     </script>
 
 <script>
+    
     $(document).ready(function(){
         $( "#e5" ).daterangepicker({
             datepickerOptions : {
@@ -83,15 +84,50 @@
             }
         });
         $( "#e5_get" ).click(function () {
-        
-        var sdate = JSON.stringify($("#e5").daterangepicker("getRange").start);
-        var sdate = sdate.substring(0, sdate.indexOf('T'));
-        var sdate = sdate.substring(1, sdate.length);
-        var edate = JSON.stringify($("#e5").daterangepicker("getRange").end);
-        var edate = edate.substring(0, edate.indexOf('T'));
-        var edate = edate.substring(1, edate.length);
+            
+            // array for data trace
 
-        window.alert(sdate + edate);
+            window.tracerange = {
+                x: [],
+                y: [],
+                mode: 'lines'
+                };
+            
+            // get start date and end date string from date range picker
+
+            var sdate = JSON.stringify($("#e5").daterangepicker("getRange").start);
+            var sdate = sdate.substring(0, sdate.indexOf('T'));
+            var sdate = sdate.substring(1, sdate.length);
+            var edate = JSON.stringify($("#e5").daterangepicker("getRange").end);
+            var edate = edate.substring(0, edate.indexOf('T'));
+            var edate = edate.substring(1, edate.length);
+            
+            // url for get request
+            var brandrange = $('#brandSelectRange :selected').text()
+            var urlrange = 'data.php?brand=' + brandrange + '&sdate=' + sdate + '&edate=' + edate
+
+            // get request to grab range data from db
+            $.ajax({
+                dataType: 'json',
+                url: urlrange,
+
+                // push data into var window.tracerange 
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+
+                        window.tracerange.y.push(parseInt(data[i].Stat));
+                        window.tracerange.x.push(data[i].Tstamp);  
+
+                        }
+                    
+                    // assign var to the graph div
+                    var graph = document.getElementById('graph');
+                    
+                    // display graph
+                    Plotly.newPlot(graph, [window.tracerange]);
+
+                    }
+                });
 
         })
     });
@@ -108,7 +144,7 @@
     <!-- datepicker -->
     <p>Date: <input type="text" id="datepicker1"></p>
 
-    <!-- Dropdown to select brand -->
+    <!-- Dropdown to select brand for single day -->
     <p>Brand: <select id="brandSelect1">
             <option value="1">ALL</option>
             <option value="1">DP</option>
@@ -123,6 +159,15 @@
 
     <p><input type="text" id="e5"></p>
     <p><button type="button" id="e5_get">Update Button</button></p>
+
+    <!-- Dropdown to select brand for range stats -->
+    <p>Brand: <select id="brandSelectRange">
+            <option value="1">ALL</option>
+            <option value="1">DP</option>
+            <option value="2">CR</option>
+            <option value="2">PA</option>
+            </select>
+        </p>
 
 
     
