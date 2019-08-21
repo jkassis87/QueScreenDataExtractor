@@ -33,7 +33,7 @@ if ($brand == 'ALL') {
 
 } else {
 	
-	$query = "SELECT Stat, Tstamp FROM alldata WHERE Brand = '$brand' AND DATE(Tstamp) = '$tstamp' ORDER BY Tstamp ASC";
+	$query = "SELECT Tstamp, SUM(Stat) as 'Stat' FROM alldata WHERE Date(Tstamp) BETWEEN '$sdate' and '$edate' AND Brand = '$brand' GROUP BY Tstamp ORDER BY Tstamp ASC"; 
 	$result = $mysqli->query($query);
 	$data = array();
 	foreach ($result as $row) { $data[] = $row; } 
