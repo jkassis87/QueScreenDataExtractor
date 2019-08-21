@@ -1,46 +1,114 @@
-<?php
-/**
- * filename: data.php
- * description: this will return the requested stats
- */
+<!doctype html>
+<html lang="en">
+<head>
+<title>Team Statistics</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+</head>
 
-//setting header to json
-header('Content-Type: application/json');
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="js/jquery.comiseo.daterangepicker.css" rel="stylesheet">
 
-//database
-define('DB_HOST', '127.0.0.1');
-define('DB_USERNAME', 'larauser');
-define('DB_PASSWORD', 'password');
-define('DB_NAME', 'charta');
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-//get connection
-$mysqli = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
-if(!$mysqli){
-	die("Connection failed: " . $mysqli->error);
-}
+<script src="js/jquery.comiseo.daterangepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
-// set the _GET values
-$brand = $_GET["brand"];
-$sdate = $_GET["sdate"];
-$edate = $_GET["edate"];
 
-if ($brand == 'ALL') {
+<script>
 
-	$query = "SELECT Tstamp, SUM(Stat) as 'Stat' FROM alldata WHERE Date(Tstamp) BETWEEN '$sdate' and '$edate' GROUP BY Tstamp ORDER BY Tstamp ASC"; 
-	$result = $mysqli->query($query);
-	$data = array();
-	foreach ($result as $row) { $data[] = $row; }
+    $(document).ready(function(){
+        $( "#e5" ).daterangepicker({
+            datepickerOptions : {
+                numberOfMonths: 2,
+                dateFormat: 'yy-mm-dd',
+            }
+        });
+        $( "#e5_get" ).click(function () {
+            
+            // array for data trace
 
-} else {
-	
-	$query = "SELECT Tstamp, SUM(Stat) as 'Stat' FROM alldata WHERE Date(Tstamp) BETWEEN '$sdate' and '$edate' AND Brand = '$brand' GROUP BY Tstamp ORDER BY Tstamp ASC"; 
-	$result = $mysqli->query($query);
-	$data = array();
-	foreach ($result as $row) { $data[] = $row; } 
+            window.tracerange = {
+                x: [],
+                y: [],
+                mode: 'lines'
+                };
+            
+            // get start date and end date string from date range picker
 
-}
+            var sdate = JSON.stringify($("#e5").daterangepicker("getRange").start);
+            var sdate = sdate.substring(0, sdate.indexOf('T'));
+            var sdate = sdate.substring(1, sdate.length);
+            var edate = JSON.stringify($("#e5").daterangepicker("getRange").end);
+            var edate = edate.substring(0, edate.indexOf('T'));
+            var edate = edate.substring(1, edate.length);
 
-//now print the data
-echo json_encode($data);
-//echo json_encode($newArr);
-//var_dump($data);
+            document.getElementById("svalue").innerHTML = sdate;
+            document.getElementById("evalue").innerHTML = edate;
+            document.getElementById("bvalue").innerHTML = brandrange;
+            // url for get request
+            var brandrange = $('#brandSelectRange :selected').text()
+            var urlrange = 'rangedata.php?brand=' + brandrange + '&sdate=' + sdate + '&edate=' + edate
+
+            document.getElementById("svalue").innerHTML = sdate;
+            document.getElementById("evalue").innerHTML = edate;
+            document.getElementById("bvalue").innerHTML = brandrange;
+            document.getElementById("uvalue").innerHTML = urlrange;
+
+            // get request to grab range data from db
+            $.ajax({
+                dataType: 'json',
+                url: urlrange,
+
+                // push data into var window.tracerange 
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+
+                        window.tracerange.y.push(parseInt(data[i].Stat));
+                        window.tracerange.x.push(data[i].Tstamp);  
+
+                        }
+                    
+                    // assign var to the graph div
+                    var graph = document.getElementById('graph');
+                    
+                    // display graph
+                    Plotly.newPlot(graph, [window.tracerange]);
+
+                    }
+                });
+
+        })
+    });
+</script>
+
+
+</head>
+    
+<body>
+
+    <!-- graph is displayed in this div -->
+    <div id="graph"></div>
+
+    <!-- datepicker -->
+    <p><input type="text" id="e5"></p>
+
+    <!-- graph updates when button is pressed -->
+    <p><button type="button" id="e5_get">Update Graph</button></p>
+
+    <!-- Dropdown to select brand for range stats -->
+    <p>Brand: <select id="brandSelectRange">
+            <option value="1">ALL</option>
+            <option value="1">DP</option>
+            <option value="2">CR</option>
+            <option value="2">PA</option>
+            </select>
+        </p>
+
+<p id="svalue"></p>
+<p id="evalue"></p>
+<p id="bvalue"></p>
+<p id="uvalue"></p>
+    
+</body>
