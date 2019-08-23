@@ -2,6 +2,11 @@
 /**
  * filename: data.php
  * description: this will return the requested stats
+ TRY THIS FOR 2 DISCRETE DATES:
+SELECT Tstamp, SUM(Stat) as 'Stat' FROM alldata WHERE Date(Tstamp) = '2019-01-04' GROUP BY Tstamp
+UNION
+SELECT Tstamp, SUM(Stat) as 'Stat' FROM alldata WHERE Date(Tstamp) = '2019-01-05' GROUP BY Tstamp 
+ORDER BY Tstamp ASC
  */
 
 //setting header to json
