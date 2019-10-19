@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Team Statistics</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+</head>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script>
+    
+    // datepicker element
+    $(document).ready(function(){
+        $( "#datepickerA, #datepickerB" ).datepicker({
+                dateFormat: "yy-mm-dd", 
+            });
+        
+
+        // action to update graphe when date is clicked
+        $(document).on("click", "#butta", function(event, ui){
+
+
+            // create template for data to graph
+            window.trace1 = {
+            x: [],
+            y: [],
+            mode: 'lines'
+            };
+
+            window.trace2 = {
+            x: [],
+            y: [],
+            mode: 'lines'
+            };
+
+
+            // elements for get request
+            var brand1 = $('#brandSelect1 :selected').text()
+            console.log(brand1)
+            var brand2 = $('#brandSelect2 :selected').text()
+            console.log(brand2)
+            var tdateA = $("#datepickerA").datepicker("getDate")
+            var tdate1 = $.datepicker.formatDate("yy-mm-dd", tdateA)
+            var tdateB = $("#datepickerB").datepicker("getDate")
+            var tdate2 = $.datepicker.formatDate("yy-mm-dd", tdateB)
+            var urlA = 'data.php?brand=' + brand1 + '&date=' + tdate1
+            var urlB = 'data.php?brand=' + brand2 + '&date=' + tdate2
+
+            // get request to grab data from db
+
+
+
+            function first() {
+                var deferred = $.Deferred();
+                $.ajax({
+                    dataType: 'json',
+                    url: urlA,
+
+                    // push data into var window.trace1 
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            window.trace1.x.push(data[i].Tstamp);  
+                            window.trace1.y.push(parseInt(data[i].Stat));
+                            }
+                    }
+                });
+
+                return deferred.promise();
+            };
+
+
+            function second() {
+                $.ajax({
+                    dataType: 'json',
+                    url: urlB,
+
+                    // push data into var window.trace1 
+                    success: function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            window.trace2.x.push(data[i].Tstamp);  
+                            window.trace2.y.push(parseInt(data[i].Stat));
+                            }
+        
+                        // assign var to the graph div
+                        var graph = document.getElementById('graph');
+                        
+                        Plotly.newPlot(graph, [window.trace1, window.trace2] );
+                    }
+                });
+            };
+
+            
+
+            first().then(second());
+
+        });
+    });
+</script>
+</head>
+
+<body>
+
+    <!-- graph is displayed in this div -->
+    <div id="graph"></div>
+
+    <!-- datepicker -->
+    <p>Date 1: <input type="text" id="datepickerA"></p>
+    <p>Date 2: <input type="text" id="datepickerB"></p>
+
+    <!-- Dropdown to select brand -->
+    <p>First Brand: <select id="brandSelect1">
+            <option value="1">ALL</option>
+            <option value="1">DP</option>
+            <option value="2">CR</option>
+            <option value="2">PA</option>
+            </select>
+        </p>
+    <p>Second Brand: <select id="brandSelect2">
+        <option value="1">ALL</option>
+        <option value="1">DP</option>
+        <option value="2">CR</option>
+        <option value="2">PA</option>
+        </select>
+    </p>
+
+    <!-- graph updates when button is pressed -->
+    <p><button type="button" id="butta">Update Graph</button></p>
+
+    
+</body>
