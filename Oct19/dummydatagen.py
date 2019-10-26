@@ -28,8 +28,8 @@ while start_date <= end_date:
     tlist.append([
         str(id), # table ID
         str(start_date), # table TStamp
-        teams[tid], # table team
         brands[bid], # table brand
+        teams[tid], # table team
         str(random.randint(0,10)), # table TixNew
         str(random.randint(0, 10)), # table TixAnswered
         str(random.randint(0, 100)), # table TixWaiting
